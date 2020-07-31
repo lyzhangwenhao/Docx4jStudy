@@ -22,16 +22,19 @@ import java.util.Date;
  * @date 2020/7/28 9:22
  */
 public class Test {
-    public  Logger logger = Logger.getLogger(Test.class);
-    public  WordprocessingMLPackage wpMLPackage;
+    private Logger logger = Logger.getLogger(Test.class);
+    private WordprocessingMLPackage wpMLPackage;
 
+    @org.junit.Test
+    public void method6(){
+
+    }
 
     @org.junit.Test
     public void method5(){
         //输入毫秒数，转化为日期，用simpleDateFormat  +  Date 方法；
-        /**
-         * 直接用SimpleDateFormat格式化 Date对象，即可得到相应格式的日期 字符串。
-         */
+         //直接用SimpleDateFormat格式化 Date对象，即可得到相应格式的日期 字符串。
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
         long time3 = 1470212176122L;
 
