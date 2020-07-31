@@ -27,6 +27,12 @@ public class Test {
 
     @org.junit.Test
     public void method6(){
+        try {
+            wpMLPackage = WordprocessingMLPackage.load(new File("D:/TestFile/test1.docx"));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
