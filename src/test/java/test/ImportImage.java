@@ -93,6 +93,8 @@ public class ImportImage {
         }
     }
 
+
+
     public HeaderPart createHeader(WordprocessingMLPackage wpMLPackage){
         HeaderPart headerPart = null;
         try {
