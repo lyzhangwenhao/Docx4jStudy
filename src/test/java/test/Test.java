@@ -28,8 +28,11 @@ public class Test {
     @org.junit.Test
     public void method6(){
         try {
-            wpMLPackage = WordprocessingMLPackage.load(new File("D:/TestFile/test1.docx"));
-            
+            wpMLPackage = WordprocessingMLPackage.createPackage();
+
+            File logo = new File("./resources/images/logo.png");
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
