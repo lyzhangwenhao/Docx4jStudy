@@ -10,7 +10,6 @@ import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.openpackaging.parts.WordprocessingML.HeaderPart;
 import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.*;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +17,6 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * ClassName: Test2
@@ -27,11 +25,10 @@ import java.util.List;
  * @author Mi_dad
  * @date 2020/7/31 14:30
  */
-public class ImportImage {
-    private WordprocessingMLPackage wpMLPackage;
+public class Cover {
+    private ObjectFactory objectFactory = new ObjectFactory();
 
-    @Test
-    public void method1(){
+    public WordprocessingMLPackage createCover(WordprocessingMLPackage wpMLPackage){
         try {
             wpMLPackage = WordprocessingMLPackage.createPackage();
 
@@ -72,59 +69,16 @@ public class ImportImage {
 
             //下一页
             addNextPage(wpMLPackage);
-            //页眉
-            HeaderPart header = createHeader(wpMLPackage);
-            ObjectFactory factory = new ObjectFactory();
-            P p = factory.createP();
-            R r = factory.createR();
-            Text text = new Text();
-            text.setValue("这是一个页眉");
-            r.getContent().add(text);
-            p.getContent().add(r);
-            header.getContent().add(p);
-            header.getContent().add(newImage(wpMLPackage, header, "src/test/resources/images/logo.png"));
-            wpMLPackage.getMainDocumentPart().addObject(header);
 
-
-            wpMLPackage.save(new File("D:\\00_工作\\Docx4j学习\\文件1.docx"));
-            System.out.println("Success......");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    public HeaderPart createHeader(WordprocessingMLPackage wpMLPackage){
-        HeaderPart headerPart = null;
-        try {
-            headerPart = new HeaderPart();
-
-            Relationship relationship = wpMLPackage.getMainDocumentPart().addTargetPart(headerPart);
-            createHeaderReference(wpMLPackage,relationship);
-            return headerPart;
+//            wpMLPackage.save(new File("D:/TestFile/文件1.docx"));
+            System.out.println("Cover Success......");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return headerPart;
+        return wpMLPackage;
     }
-    public void createHeaderReference(WordprocessingMLPackage wpMLPackage,Relationship relationship){
-        List<SectionWrapper> sections = wpMLPackage.getDocumentModel().getSections();
-        ObjectFactory factory = new ObjectFactory();
 
-        SectPr sectPr = sections.get(sections.size() - 1).getSectPr();
-        if (sectPr==null){
-            sectPr = factory.createSectPr();
-            wpMLPackage.getMainDocumentPart().addObject(sectPr);
-            sections.get(sections.size()-1).setSectPr(sectPr);
-        }
-
-        HeaderReference headerReference = factory.createHeaderReference();
-        headerReference.setId(relationship.getId());
-        headerReference.setType(HdrFtrRef.DEFAULT);
-        sectPr.getEGHdrFtrReferences().add(headerReference);
-    }
     /**
      * 创建包含图片的内容
      *
@@ -162,7 +116,7 @@ public class ImportImage {
      * @param wpMLPackage
      */
     public void addNextPage(WordprocessingMLPackage wpMLPackage){
-        ObjectFactory objectFactory = new ObjectFactory();
+//        ObjectFactory objectFactory = new ObjectFactory();
 
         P para = objectFactory.createP();
         SectPr sectPr = objectFactory.createSectPr();
@@ -182,22 +136,22 @@ public class ImportImage {
      * @param word
      */
     public void addTitleLittle(WordprocessingMLPackage wpMLPackage,String word){
-        ObjectFactory factory = new ObjectFactory();
-        P para = factory.createP();
-        R run = factory.createR();
-        Text text = factory.createText();
+//        ObjectFactory objectFactory = new ObjectFactory();
+        P para = objectFactory.createP();
+        R run = objectFactory.createR();
+        Text text = objectFactory.createText();
         //添加标题内容
         text.setValue(word);
         run.getContent().add(text);
         //设置居中格式
-        PPr pPr = factory.createPPr();
+        PPr pPr = objectFactory.createPPr();
         Jc jc = pPr.getJc();
         if (jc==null){
             jc = new Jc();
         }
         jc.setVal(JcEnumeration.CENTER);
 
-        RPr rPr = factory.createRPr();
+        RPr rPr = objectFactory.createRPr();
         //设置颜色
         Color color = new Color();
         color.setVal("#0070c0");
@@ -209,7 +163,7 @@ public class ImportImage {
         rPr.setSz(fontSize);
 
         //设置加粗
-        BooleanDefaultTrue booleanDefaultTrue = factory.createBooleanDefaultTrue();
+        BooleanDefaultTrue booleanDefaultTrue = objectFactory.createBooleanDefaultTrue();
         booleanDefaultTrue.setVal(Boolean.TRUE);
         rPr.setB(booleanDefaultTrue);
 
@@ -234,9 +188,9 @@ public class ImportImage {
      * @param brNum 换行数量
      */
     public void addBr(WordprocessingMLPackage wpMLPackage, int brNum){
-        ObjectFactory fac = new ObjectFactory();
-        P para = fac.createP();
-        R run = fac.createR();
+//        ObjectFactory objectFactory = new ObjectFactory();
+        P para = objectFactory.createP();
+        R run = objectFactory.createR();
         Br br = new Br();
         //循环插入
         for (int i=0; i<brNum; i++){
@@ -253,12 +207,12 @@ public class ImportImage {
      * @param word 标题内容
      */
     public void addTitleWordToPackage(WordprocessingMLPackage wpMLPackage, String word){
-        ObjectFactory factory = new ObjectFactory();
-        P para = factory.createP();
-        R run = factory.createR();
-        Text text = factory.createText();
+//        ObjectFactory objectFactory = new ObjectFactory();
+        P para = objectFactory.createP();
+        R run = objectFactory.createR();
+        Text text = objectFactory.createText();
         text.setValue(word);
-        PPr pPr = factory.createPPr();
+        PPr pPr = objectFactory.createPPr();
         Jc jc = pPr.getJc();
         if (jc == null){
             jc = new Jc();
@@ -317,11 +271,11 @@ public class ImportImage {
      */
     public P addInlineImageToParagraph(Inline inline){
         //添加内联对象到一个段落中
-        ObjectFactory factory = new ObjectFactory();
-        P p = factory.createP();
-        R run = factory.createR();
+//        ObjectFactory objectFactory = new ObjectFactory();
+        P p = objectFactory.createP();
+        R run = objectFactory.createR();
         p.getContent().add(run);
-        PPr pPr = factory.createPPr();
+        PPr pPr = objectFactory.createPPr();
         Jc jc = pPr.getJc();
         if (jc == null){
             jc = new Jc();
@@ -330,7 +284,7 @@ public class ImportImage {
         jc.setVal(JcEnumeration.CENTER);
         pPr.setJc(jc);
         p.setPPr(pPr);
-        Drawing drawing = factory.createDrawing();
+        Drawing drawing = objectFactory.createDrawing();
         run.getContent().add(drawing);
         drawing.getAnchorOrInline().add(inline);
         return p;
