@@ -2,14 +2,14 @@ package test;
 
 import org.apache.log4j.Logger;
 import org.docx4j.jaxb.Context;
+import org.docx4j.model.properties.table.tr.TrHeight;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.wml.ObjectFactory;
-import org.docx4j.wml.P;
-import org.docx4j.wml.R;
-import org.docx4j.wml.Text;
+import org.docx4j.wml.*;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +24,134 @@ import java.util.Date;
 public class Test {
     private Logger logger = Logger.getLogger(Test.class);
     private WordprocessingMLPackage wpMLPackage;
+    private ObjectFactory factory = Context.getWmlObjectFactory();
+
+    {
+        try {
+            wpMLPackage = WordprocessingMLPackage.createPackage();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @org.junit.Test
+    public void method7(){
+
+        Tbl tbl = factory.createTbl();
+        //给table添加边框
+        addBorders(tbl);
+        Tr tr = factory.createTr();
+        //单元格居中对齐
+        Jc jc = new Jc();
+        jc.setVal(JcEnumeration.CENTER);
+        TblPr tblPr = tbl.getTblPr();
+        tblPr.setJc(jc);
+        tbl.setTblPr(tblPr);
+
+        //表格表头
+        CTBackground ctBackground = new CTBackground();//-------------------------------------------------------------------
+        ctBackground.setColor("#4f81bd");
+        TrPr trPr = tr.getTrPr();
+        if (trPr==null){
+            trPr = new TrPr();
+        }
+
+        addTableTc(tr, "报警机组",1100);
+        addTableTc(tr, "机警部件",1100);
+        addTableTc(tr, "报警次数", 1100);
+        addTableTc(tr, "触发报警门限及类型",2200);
+        addTableTc(tr, "最大报警特征值", 1800);
+        addTableTc(tr, "报警等级", 1100);
+        //将tr添加到table中
+        tbl.getContent().add(tr);
+
+        //第一行数据
+        Tr dateTr1 = factory.createTr();
+        addTableTc(dateTr1, "01#", 1100);
+        addTableTc(dateTr1, "发电机前轴承", 1100);
+        addTableTc(dateTr1, "8", 1100);
+        addTableTc(dateTr1, "3g", 1100);
+        addTableTc(dateTr1, "有效值", 1100);
+        addTableTc(dateTr1, "5g", 1800);
+        addTableTc(dateTr1, "预警", 1100);
+        //将tr添加到table中
+        tbl.getContent().add(dateTr1);
+
+        //第一行数据
+        Tr dateTr2 = factory.createTr();
+        addTableTc(dateTr2, "01#", 1100);
+        addTableTc(dateTr2, "发电机前轴承", 1100);
+        addTableTc(dateTr2, "8", 1100);
+        addTableTc(dateTr2, "7g", 1100);
+        addTableTc(dateTr2, "峰值", 1100);
+        addTableTc(dateTr2, "10g", 1800);
+        addTableTc(dateTr2, "预警", 1100);
+        //将tr添加到table中
+        tbl.getContent().add(dateTr2);
+
+        wpMLPackage.getMainDocumentPart().addObject(tbl);
+        try {
+            wpMLPackage.save(new File("D:/TestFile/文件测试.docx"));
+        } catch (Docx4JException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 添加TableCell
+     * @param tableRow
+     * @param content
+     */
+    public void addTableTc(Tr tableRow,String content, int width){
+        Tc tc = factory.createTc();
+        //设置宽度
+        setCellWidth(tc, width);
+        tc.getContent().add(wpMLPackage.getMainDocumentPart().createParagraphOfText(content));
+
+        //设置垂直居中
+        TcPr tcPr = tc.getTcPr();
+        if (tcPr == null){
+            tcPr = new TcPr();
+        }
+        CTVerticalJc ctVerticalJc = factory.createCTVerticalJc();
+        ctVerticalJc.setVal(STVerticalJc.CENTER);
+        tcPr.setVAlign(ctVerticalJc);
+
+        tc.setTcPr(tcPr);
+
+        tableRow.getContent().add(tc);
+    }
+    /**
+     *  本方法创建一个单元格属性集对象和一个表格宽度对象. 将给定的宽度设置到宽度对象然后将其添加到
+     *  属性集对象. 最后将属性集对象设置到单元格中.
+     */
+    private static void setCellWidth(Tc tableCell, int width) {
+        TcPr tableCellProperties = new TcPr();
+        TblWidth tableWidth = new TblWidth();
+        tableWidth.setW(BigInteger.valueOf(width));
+        tableCellProperties.setTcW(tableWidth);
+        tableCell.setTcPr(tableCellProperties);
+    }
+    /**
+     *  本方法为表格添加边框
+     */
+    private static void addBorders(Tbl table) {
+        table.setTblPr(new TblPr());
+        CTBorder border = new CTBorder();
+        border.setColor("auto");
+        border.setSz(new BigInteger("4"));
+        border.setSpace(new BigInteger("0"));
+        border.setVal(STBorder.SINGLE);
+
+        TblBorders borders = new TblBorders();
+        borders.setBottom(border);
+        borders.setLeft(border);
+        borders.setRight(border);
+        borders.setTop(border);
+        borders.setInsideH(border);
+        borders.setInsideV(border);
+        table.getTblPr().setTblBorders(borders);
+    }
 
     @org.junit.Test
     public void method6(){
