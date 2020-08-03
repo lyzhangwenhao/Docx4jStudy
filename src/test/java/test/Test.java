@@ -51,10 +51,7 @@ public class Test {
         //表格表头
         CTBackground ctBackground = new CTBackground();//-------------------------------------------------------------------
         ctBackground.setColor("#4f81bd");
-        TrPr trPr = tr.getTrPr();
-        if (trPr==null){
-            trPr = new TrPr();
-        }
+        
 
         addTableTc(tr, "报警机组",1100);
         addTableTc(tr, "机警部件",1100);
