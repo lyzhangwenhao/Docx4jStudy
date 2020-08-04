@@ -26,6 +26,15 @@ import java.text.NumberFormat;
  * @date 2020/8/4 16:39
  */
 public class DrawChartPieUtil {
+    /**
+     * 根据传入的数据获取图片的File文件
+     * @param proName 项目名称
+     * @param normalPort 正常机组数量
+     * @param warningPort 预警机组数量
+     * @param alarmPort 警告机组数量
+     * @param filePath 图片file路径
+     * @return 返回File文件类型
+     */
     public static File getImageFile(String proName,int normalPort,int warningPort,int alarmPort,String filePath)
     {
         //设置数据源
@@ -50,12 +59,12 @@ public class DrawChartPieUtil {
         //设置饼图标签字体
         mPiePlot.setLabelFont(new Font("宋体", Font.PLAIN, 12));
 
+        //将图标转换为BufferedImage类型
         BufferedImage bufferedImage = mChart.createBufferedImage(475, 300);
 
-        FileOutputStream fos = null;
         File file = new File(filePath);
-
         try {
+            //保存图表为一个File文件类型
             ImageIO.write(bufferedImage, "png", file);
             System.out.println("完成！");
         } catch (IOException e) {
@@ -64,7 +73,15 @@ public class DrawChartPieUtil {
         return file;
 
     }
-    public static PieDataset GetDataset(int normalPort,int warningPort,int alarmPort)
+
+    /**
+     * 设置饼状图的数据
+     * @param normalPort 正常机组数量
+     * @param warningPort 预警机组数量
+     * @param alarmPort 警告机组数量
+     * @return 返回一个饼状图数据源
+     */
+    private static PieDataset GetDataset(int normalPort,int warningPort,int alarmPort)
     {
         DefaultPieDataset mDataset = new DefaultPieDataset();
         mDataset.setValue(" 报警机组", new Double(alarmPort));

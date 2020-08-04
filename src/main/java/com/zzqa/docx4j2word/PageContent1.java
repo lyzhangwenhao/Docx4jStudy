@@ -22,30 +22,31 @@ import java.util.Date;
  * @author Mi_dad
  * @date 2020/8/3 11:19
  */
-public class PageContent {
+public class PageContent1 {
     private ObjectFactory objectFactory = new ObjectFactory();
 
-    public WordprocessingMLPackage createPageContent(WordprocessingMLPackage wpMLPackage){
+    public WordprocessingMLPackage createPageContent(WordprocessingMLPackage wpMLPackage,
+                                                     String proName,int normalPort,int warningPort,int alarmPort,String filePath){
         try {
+            //TODO 页脚和页眉没做完，目前达不到要求，抽空继续做，先将核心内容完成
             Relationship relationship = AddingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司\n" +
                     "◆ 我们保留本文档和信息的全部所有权利。未经明示授权，严禁复制、使用或披露给第三方。");
             AddingAFooter.createFooterReference(wpMLPackage,relationship);
 
-
-
-            //添加标题一
+            //添加标题一：项目概述
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "1 项目概述");
-
             //文本内容
-            String titleContent1 = "XXXX项目共有xx台机组，每台机组配置一套在线状态监测系统，用于监测传动链部件运行情况，本期CMS监测系统监测结果为：当前正常机组xx台，预警机组xx台，报警机组xx台。";
+            String titleContent1 = proName+"项目共有"+(normalPort+warningPort+alarmPort)+
+                    "台机组，每台机组配置一套在线状态监测系统，用于监测传动链部件运行情况，本期CMS监测系统监测结果为：当前正常机组"
+                    +normalPort+"台，预警机组"+warningPort+"台，报警机组"+alarmPort+"台。";
             addParagraph(wpMLPackage, titleContent1);
             //根据数据生成饼状图
-            File pieImage = DrawChartPieUtil.getImageFile("风电机组运行状况", 100, 35, 12, "D:/TestFile/images/Pie.png");
+            File pieImage = DrawChartPieUtil.getImageFile(proName, normalPort, warningPort, alarmPort, filePath);
             byte[] pieImageBytes = convertImageToByteArray(pieImage);
             addImageToPackage(wpMLPackage, pieImageBytes);
 //            wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Caption", titleContent1);
             //表格标题
-            addTableTitle(wpMLPackage, "表1 预/报警机组统计");
+            addTableTitle(wpMLPackage, "图1.1 机组状态统计饼状图");
 
 
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1","2 运行状况");

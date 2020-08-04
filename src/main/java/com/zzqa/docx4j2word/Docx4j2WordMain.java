@@ -17,23 +17,32 @@ public class Docx4j2WordMain {
     public static void main(String[] args) {
         try {
             WordprocessingMLPackage wpMLPackage = WordprocessingMLPackage.createPackage();
-            Cover cover = new Cover();
-            //创建封面
+
+            //数据
             String reportName = "风电场风电机组";
             Long startTime = 1468166400000L;
             Long endTime = 1487088000000L;
             String logoPath = "src\\main\\resources\\images\\logo.png";
             String linePath = "src\\main\\resources\\images\\横线.png";
-            wpMLPackage = cover.createCover(wpMLPackage,reportName,startTime, endTime, logoPath,linePath);
 
-            //文章内容
-            PageContent pageContent = new PageContent();
-            wpMLPackage = pageContent.createPageContent(wpMLPackage);
+            int normalPort = 106;
+            int warningPort = 20;
+            int alarmPort = 12;
+            String pieFilePath = "D:/TestFile/images/"+new String(Long.toString(System.currentTimeMillis()))+reportName+".png";
+            //最后保存的文件名
+            String fileName = reportName+getDate(new Date(startTime))+getDate(new Date(endTime))+"检测报告.docx";
+            //保存的文件路径
+            String targetFilePath = "D:/TestFile/"+fileName;
+
+            Cover cover = new Cover();
+            //创建封面
+            wpMLPackage = cover.createCover(wpMLPackage,reportName,startTime, endTime, logoPath,linePath);
+            //文章内容1:项目概述
+            PageContent1 pageContent = new PageContent1();
+            wpMLPackage = pageContent.createPageContent(wpMLPackage,reportName,normalPort,warningPort,alarmPort,pieFilePath);
 
             //保存文件
-            String fileName = reportName+getDate(new Date(startTime))+getDate(new Date(endTime))+"检测报告.docx";
-            String filePath = "D:/TestFile/"+fileName;
-            wpMLPackage.save(new File(filePath));
+            wpMLPackage.save(new File(targetFilePath));
 
         } catch (Exception e) {
             e.printStackTrace();
