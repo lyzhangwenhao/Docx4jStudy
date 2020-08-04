@@ -10,6 +10,7 @@ import org.docx4j.wml.*;
 
 import java.io.File;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +34,10 @@ public class Test {
             e.printStackTrace();
         }
     }
+    @org.junit.Test
+    public void method8(){
+
+    }
 
     @org.junit.Test
     public void method7(){
@@ -51,7 +56,8 @@ public class Test {
         //表格表头
         CTBackground ctBackground = new CTBackground();//-------------------------------------------------------------------
         ctBackground.setColor("#4f81bd");
-        
+
+
 
         addTableTc(tr, "报警机组",1100);
         addTableTc(tr, "机警部件",1100);
@@ -135,7 +141,7 @@ public class Test {
     private static void addBorders(Tbl table) {
         table.setTblPr(new TblPr());
         CTBorder border = new CTBorder();
-        border.setColor("auto");
+        border.setColor("#95b3d7");
         border.setSz(new BigInteger("4"));
         border.setSpace(new BigInteger("0"));
         border.setVal(STBorder.SINGLE);
@@ -171,10 +177,17 @@ public class Test {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
         long time3 = 1470212176122L;
+        String format = transitionDate(time3);
+        System.out.println(format);
+    }
+    public String transitionDate(Long createTime){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
 
-        Date date2 = new Date();
-        date2.setTime(time3);
-        System.out.println(simpleDateFormat.format(date2));
+        simpleDateFormat.applyPattern("yyyy-MM-dd hh:mm:ss");
+        Date date = new Date();
+        date.setTime(createTime);
+        String format = simpleDateFormat.format(date);
+        return format;
     }
 
 

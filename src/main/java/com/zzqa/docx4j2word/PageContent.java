@@ -1,14 +1,12 @@
-package test;
+package com.zzqa.docx4j2word;
 
 import org.apache.commons.lang.StringUtils;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
-import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.Part;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.*;
-import test.com.zzqa.utils.DrawChartPieUtil;
+import com.zzqa.utils.DrawChartPieUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

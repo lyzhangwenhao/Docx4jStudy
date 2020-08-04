@@ -1,38 +1,24 @@
-package com.tom.pojo.com.tom.utils;
+package utils;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-import javax.xml.bind.JAXBException;
 
 import org.docx4j.XmlUtils;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.structure.SectionWrapper;
-import org.docx4j.model.table.TblFactory;
-import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.Part;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.openpackaging.parts.WordprocessingML.DocumentSettingsPart;
-import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
-import org.docx4j.openpackaging.parts.relationships.Namespaces;
 import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.BooleanDefaultTrue;
 import org.docx4j.wml.CTBorder;
 import org.docx4j.wml.CTDocProtect;
 import org.docx4j.wml.CTSettings;
-import org.docx4j.wml.CTTblLayoutType;
 import org.docx4j.wml.CTVerticalJc;
 import org.docx4j.wml.FooterReference;
-import org.docx4j.wml.Ftr;
 import org.docx4j.wml.HdrFtrRef;
 import org.docx4j.wml.Jc;
 import org.docx4j.wml.JcEnumeration;
@@ -46,21 +32,15 @@ import org.docx4j.wml.STBorder;
 import org.docx4j.wml.STCryptProv;
 import org.docx4j.wml.STDocProtect;
 import org.docx4j.wml.STHint;
-import org.docx4j.wml.STTblLayoutType;
 import org.docx4j.wml.STVerticalJc;
 import org.docx4j.wml.SectPr;
 import org.docx4j.wml.Tbl;
-import org.docx4j.wml.TblGrid;
-import org.docx4j.wml.TblGridCol;
-import org.docx4j.wml.TblPr;
-import org.docx4j.wml.TblWidth;
 import org.docx4j.wml.Tc;
 import org.docx4j.wml.TcPr;
 import org.docx4j.wml.Tr;
 import org.docx4j.wml.TrPr;
 import org.docx4j.wml.SectPr.PgMar;
 import org.docx4j.wml.TcPrInner.HMerge;
-import org.docx4j.wml.TcPrInner.TcBorders;
 import org.docx4j.wml.TcPrInner.VMerge;
 
 
