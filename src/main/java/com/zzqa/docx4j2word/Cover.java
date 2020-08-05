@@ -1,5 +1,6 @@
 package com.zzqa.docx4j2word;
 
+import com.zzqa.utils.Docx4jUtil;
 import org.apache.commons.lang.StringUtils;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.jaxb.Context;
@@ -33,26 +34,26 @@ public class Cover {
 
             //logo图片插入
             File logo = new File(logoPath);
-            byte[] logoBytes = convertImageToByteArray(logo);
-            addImageToPackage(wpMLPackage, logoBytes);
+            byte[] logoBytes = Docx4jUtil.convertImageToByteArray(logo);
+            Docx4jUtil.addImageToPackage(wpMLPackage, logoBytes);
 
             //横线插入
             File linePng = new File(linePath);
-            byte[] linePngBytes = convertImageToByteArray(linePng);
-            addImageToPackage(wpMLPackage, linePngBytes);
+            byte[] linePngBytes = Docx4jUtil.convertImageToByteArray(linePng);
+            Docx4jUtil.addImageToPackage(wpMLPackage, linePngBytes);
 
             //加入换行
             addBr(wpMLPackage,1);
 
             //封面标题
             addTitleWordToPackage(wpMLPackage, reportName);
-            addTitleWordToPackage(wpMLPackage, getDate(new Date(startTime))+"-"+getDate(new Date(endTime)));
+            addTitleWordToPackage(wpMLPackage, Docx4jUtil.getDate(new Date(startTime))+"-"+Docx4jUtil.getDate(new Date(endTime)));
             addTitleWordToPackage(wpMLPackage, "检测报告");
 
             //插入换行符
             addBr(wpMLPackage,2);
             //横线插入
-            addImageToPackage(wpMLPackage, linePngBytes);
+            Docx4jUtil.addImageToPackage(wpMLPackage, linePngBytes);
             //插入换行符
             addBr(wpMLPackage,1);
 
@@ -61,7 +62,7 @@ public class Cover {
             addTitleLittle(wpMLPackage,"检测与诊断中心");
             addTitleLittle(wpMLPackage,"联系电话：4000093668-7");
             addTitleLittle(wpMLPackage,"邮箱：service@windit.com.cn");
-            addTitleLittle(wpMLPackage, getDate(new Date()));
+            addTitleLittle(wpMLPackage, Docx4jUtil.getDate(new Date()));
 
             //下一页
             addNextPage(wpMLPackage);
@@ -113,8 +114,6 @@ public class Cover {
      * @param wpMLPackage
      */
     public void addNextPage(WordprocessingMLPackage wpMLPackage){
-//        ObjectFactory objectFactory = new ObjectFactory();
-
         P para = objectFactory.createP();
         SectPr sectPr = objectFactory.createSectPr();
         PPr pPr = objectFactory.createPPr();
@@ -133,7 +132,6 @@ public class Cover {
      * @param word
      */
     public void addTitleLittle(WordprocessingMLPackage wpMLPackage,String word){
-//        ObjectFactory objectFactory = new ObjectFactory();
         P para = objectFactory.createP();
         R run = objectFactory.createR();
         Text text = objectFactory.createText();
@@ -185,7 +183,6 @@ public class Cover {
      * @param brNum 换行数量
      */
     public void addBr(WordprocessingMLPackage wpMLPackage, int brNum){
-//        ObjectFactory objectFactory = new ObjectFactory();
         P para = objectFactory.createP();
         R run = objectFactory.createR();
         Br br = new Br();
@@ -220,7 +217,7 @@ public class Cover {
         //设置字体大小
         RPr rPr = new RPr();
         rPr.setB(Context.getWmlObjectFactory().createBooleanDefaultTrue());
-        setFontSize(rPr, "50");
+        Docx4jUtil.setFontSize(rPr, "50");
         run.setRPr(rPr);
 
 
@@ -230,94 +227,5 @@ public class Cover {
         para.setPPr(pPr);
         wpMLPackage.getMainDocumentPart().addObject(para);
 
-    }
-
-    /**
-     * @Description: 设置字体大小
-     */
-    public static void setFontSize(RPr runProperties, String fontSize) {
-        if (StringUtils.isNotBlank(fontSize)) {
-            HpsMeasure size = new HpsMeasure();
-            size.setVal(new BigInteger(fontSize));
-            runProperties.setSz(size);
-            runProperties.setSzCs(size);
-        }
-    }
-
-    /**
-     * 添加图片到文档中
-     * @param wpMLPackage
-     * @param bytes
-     * @throws Exception
-     */
-    public void addImageToPackage(WordprocessingMLPackage wpMLPackage,byte [] bytes) throws Exception{
-        BinaryPartAbstractImage imagePart = BinaryPartAbstractImage.createImagePart(wpMLPackage, bytes);
-        int docPrId = 1;
-        int cNvPrId = 2;
-        Inline imageInline = imagePart.createImageInline("Filename hint", "Alternative", docPrId, cNvPrId, false);
-        P p = addInlineImageToParagraph(imageInline);
-
-        wpMLPackage.getMainDocumentPart().addObject(p);
-
-    }
-
-    /**
-     * 添加内连对象到Paragraph中
-     * @param inline
-     * @return
-     */
-    public P addInlineImageToParagraph(Inline inline){
-        //添加内联对象到一个段落中
-//        ObjectFactory objectFactory = new ObjectFactory();
-        P p = objectFactory.createP();
-        R run = objectFactory.createR();
-        p.getContent().add(run);
-        PPr pPr = objectFactory.createPPr();
-        Jc jc = pPr.getJc();
-        if (jc == null){
-            jc = new Jc();
-        }
-        //设置居中
-        jc.setVal(JcEnumeration.CENTER);
-        pPr.setJc(jc);
-        p.setPPr(pPr);
-        Drawing drawing = objectFactory.createDrawing();
-        run.getContent().add(drawing);
-        drawing.getAnchorOrInline().add(inline);
-        return p;
-    }
-
-    /**
-     * 转换图片为byte数组
-     * @param file
-     * @return
-     * @throws Exception
-     */
-    public byte[] convertImageToByteArray(File file) throws Exception {
-        InputStream is = new FileInputStream(file);
-        long length = file.length();
-        if (length > Integer.MAX_VALUE){
-            System.out.println("File too large!!");
-        }
-        byte [] bytes = new byte[(int)length];
-        int offset = 0;
-        int numRead = 0;
-        while (offset<bytes.length && (numRead = is.read(bytes,offset,bytes.length-offset)) >=0){
-            offset += numRead;
-        }
-        //确认所有的字节都被读取
-        if (offset < bytes.length){
-            System.out.println("Could not completely read file"+file.getName());
-        }
-        is.close();
-        return bytes;
-    }
-
-    private String getDate(Date date){
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("yyyy年M月d日");
-        //TODO 删除输出语句
-        System.out.println("转换时间：" + sdf.format(date)); // 输出已经格式化的现在时间（24小时制）
-        return sdf.format(date);
     }
 }
