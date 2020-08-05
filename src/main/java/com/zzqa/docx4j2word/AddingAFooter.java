@@ -19,7 +19,7 @@ import java.util.List;
  * ClassName: AddingFooter
  * Description:
  *
- * @author Mi_dad
+ * @author 张文豪
  * @date 2020/8/3 10:38
  */
 public class AddingAFooter {

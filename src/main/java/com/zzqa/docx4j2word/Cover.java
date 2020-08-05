@@ -19,7 +19,7 @@ import java.util.Date;
  * ClassName: Test2
  * Description:
  *
- * @author Mi_dad
+ * @author 张文豪
  * @date 2020/7/31 14:30
  */
 public class Cover {
@@ -67,6 +67,7 @@ public class Cover {
             addNextPage(wpMLPackage);
 
 //            wpMLPackage.save(new File("D:/TestFile/文件1.docx"));
+            //TODO 删除输出语句
             System.out.println("Cover Success......");
 
         } catch (Exception e) {
@@ -315,6 +316,7 @@ public class Cover {
     private String getDate(Date date){
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
         sdf.applyPattern("yyyy年M月d日");
+        //TODO 删除输出语句
         System.out.println("转换时间：" + sdf.format(date)); // 输出已经格式化的现在时间（24小时制）
         return sdf.format(date);
     }

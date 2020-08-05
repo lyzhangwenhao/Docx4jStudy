@@ -37,6 +37,14 @@ public class Test {
     @org.junit.Test
     public void method8(){
 
+        File mkdirPath = new File("D:/chart/pieChart");
+        if(!mkdirPath.exists() && !mkdirPath.isDirectory()){
+            System.out.println("不存在");
+            mkdirPath.mkdirs();
+            System.out.println(mkdirPath.getAbsolutePath());
+        }else {
+            System.out.println("存在");
+        }
     }
 
     @org.junit.Test

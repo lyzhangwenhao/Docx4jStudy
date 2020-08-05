@@ -19,14 +19,14 @@ import java.util.Date;
  * ClassName: PageContent
  * Description:
  *
- * @author Mi_dad
+ * @author 张文豪
  * @date 2020/8/3 11:19
  */
 public class PageContent1 {
     private ObjectFactory objectFactory = new ObjectFactory();
 
     public WordprocessingMLPackage createPageContent(WordprocessingMLPackage wpMLPackage,
-                                                     String proName,int normalPort,int warningPort,int alarmPort,String filePath){
+                                                     String proName,int normalPart,int warningPart,int alarmPart){
         try {
             //TODO 页脚和页眉没做完，目前达不到要求，抽空继续做，先将核心内容完成
             Relationship relationship = AddingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司\n" +
@@ -36,15 +36,15 @@ public class PageContent1 {
             //添加标题一：项目概述
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "1 项目概述");
             //文本内容
-            String titleContent1 = proName+"项目共有"+(normalPort+warningPort+alarmPort)+
+            String titleContent1 = proName+"项目共有"+(normalPart+warningPart+alarmPart)+
                     "台机组，每台机组配置一套在线状态监测系统，用于监测传动链部件运行情况，本期CMS监测系统监测结果为：当前正常机组"
-                    +normalPort+"台，预警机组"+warningPort+"台，报警机组"+alarmPort+"台。";
+                    +normalPart+"台，预警机组"+warningPart+"台，报警机组"+alarmPart+"台。";
             addParagraph(wpMLPackage, titleContent1);
+
             //根据数据生成饼状图
-            File pieImage = DrawChartPieUtil.getImageFile(proName, normalPort, warningPort, alarmPort, filePath);
+            File pieImage = DrawChartPieUtil.getImageFile(proName, normalPart, warningPart, alarmPart);
             byte[] pieImageBytes = convertImageToByteArray(pieImage);
             addImageToPackage(wpMLPackage, pieImageBytes);
-//            wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Caption", titleContent1);
             //表格标题
             addTableTitle(wpMLPackage, "图1.1 机组状态统计饼状图");
 
@@ -55,8 +55,7 @@ public class PageContent1 {
 
             //下一页
             addNextPage(wpMLPackage);
-
-//            wpMLPackage.save(new File("D:/TestFile/文件1.docx"));
+            //TODO 删除输出语句
             System.out.println("PageContent Success......");
 
         } catch (Exception e) {
