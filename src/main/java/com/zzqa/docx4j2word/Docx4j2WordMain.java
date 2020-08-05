@@ -1,10 +1,13 @@
 package com.zzqa.docx4j2word;
 
+import com.zzqa.pojo.UnitInfo;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * ClassName: Docx4j2WordMain
@@ -18,7 +21,7 @@ public class Docx4j2WordMain {
         try {
             WordprocessingMLPackage wpMLPackage = WordprocessingMLPackage.createPackage();
 
-            //数据
+            //数据准备
             String reportName = "风电场风电机组";  //项目名称
             Long startTime = 1468166400000L;    //报告开始时间毫秒值
             Long endTime = System.currentTimeMillis();  //报告结束时间毫秒值
@@ -28,18 +31,27 @@ public class Docx4j2WordMain {
             int normalPart = 106;   //正常机组数量
             int warningPart = 20;   //预警机组数量
             int alarmPart = 12; //报警机组数量
-
             //最后保存的文件名
             String fileName = reportName+getDate(new Date(startTime))+getDate(new Date(endTime))+"检测报告.docx";
             //保存的文件路径
-            String targetFilePath = "D:/TestFile/"+fileName;
+            String targetFilePath = "D:/TestFile/projectTest/"+fileName;
+            //PageContent2的数据准备
+            List<UnitInfo> unitInfos = createData();
+            for (UnitInfo unitInfo:unitInfos){
+                System.out.println(unitInfo);
+            }
+
+
 
             Cover cover = new Cover();
             //创建封面
             wpMLPackage = cover.createCover(wpMLPackage,reportName,startTime, endTime, logoPath,linePath);
             //文章内容1:项目概述
-            PageContent1 pageContent = new PageContent1();
-            wpMLPackage = pageContent.createPageContent(wpMLPackage,reportName,normalPart,warningPart,alarmPart);
+            PageContent1 pageContent1 = new PageContent1();
+            pageContent1.createPageContent1(wpMLPackage,reportName,normalPart,warningPart,alarmPart);
+            //文本内容2:运行状况
+            PageContent2 pageContent2 = new PageContent2();
+            pageContent2.createPageContent2(wpMLPackage, unitInfos);
 
             //保存文件
             wpMLPackage.save(new File(targetFilePath));
@@ -48,8 +60,35 @@ public class Docx4j2WordMain {
             e.printStackTrace();
         }
 
-
-
+    }
+    public static List<UnitInfo> createData(){
+        List<UnitInfo> unitInfos = new ArrayList<>();
+        UnitInfo unitInfo = null;
+        int j = 0;
+        for (int i=0; i<10;i++){
+            unitInfo = new UnitInfo();
+            unitInfo.setUnitName((i+1)+"#机组");
+            if (j%2==0){
+                unitInfo.setUnitPart("发电机前轴承");
+                unitInfo.setValve("3g");
+                unitInfo.setType("有效值");
+                unitInfo.setMaxValue("5g");
+                unitInfo.setLevel("预警");
+            }else{
+                unitInfo.setUnitPart("发电机后轴承");
+                unitInfo.setValve("7g");
+                unitInfo.setType("峰值");
+                unitInfo.setMaxValue("10g");
+                unitInfo.setLevel("报警");
+            }
+            unitInfo.setCount(i+j);
+            if (j%2==0){
+                i--;
+            }
+            j++;
+            unitInfos.add(unitInfo);
+        }
+        return unitInfos;
     }
     public static String getDate(Date date){
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间

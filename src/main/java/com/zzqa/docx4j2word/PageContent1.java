@@ -26,13 +26,16 @@ import java.util.Date;
 public class PageContent1 {
     private ObjectFactory objectFactory = new ObjectFactory();
 
-    public WordprocessingMLPackage createPageContent(WordprocessingMLPackage wpMLPackage,
-                                                     String proName,int normalPart,int warningPart,int alarmPart){
+    public void createPageContent1(WordprocessingMLPackage wpMLPackage,
+                                                      String proName, int normalPart, int warningPart, int alarmPart){
         try {
             //TODO 页脚和页眉没做完，目前达不到要求，抽空继续做，先将核心内容完成
-            Relationship relationship = AddingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司\n" +
+            Relationship relationship = AddingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司\r" +
                     "◆ 我们保留本文档和信息的全部所有权利。未经明示授权，严禁复制、使用或披露给第三方。");
             AddingAFooter.createFooterReference(wpMLPackage,relationship);
+
+            Relationship headerPart = AddingAHeader.createHeaderPart(wpMLPackage, "咨询电话：4000093668-7 \r" + "网站:www.windit.com.cn ");
+            AddingAHeader.createHeaderReference(wpMLPackage, headerPart);
 
             //添加标题一：项目概述
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "1 项目概述");
@@ -49,20 +52,14 @@ public class PageContent1 {
             //表格标题
             Docx4jUtil.addTableTitle(wpMLPackage, "图1.1 机组状态统计饼状图");
 
-
-            wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1","2 运行状况");
-            wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1","3 振动图谱");
-            wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1","4 补充说明");
-
             //下一页
-            Docx4jUtil.addNextPage(wpMLPackage);
+//            Docx4jUtil.addNextPage(wpMLPackage);
             //TODO 删除输出语句
             System.out.println("PageContent Success......");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return wpMLPackage;
     }
 
     /**

@@ -4,12 +4,11 @@ import com.zzqa.utils.Docx4jUtil;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.structure.SectionWrapper;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.Part;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
-import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
+import org.docx4j.openpackaging.parts.WordprocessingML.HeaderPart;
 import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.*;
 
@@ -23,7 +22,7 @@ import java.util.List;
  * @author 张文豪
  * @date 2020/8/3 10:38
  */
-public class AddingAFooter {
+public class AddingAHeader {
     private static WordprocessingMLPackage wordMLPackage;
 
     static {
@@ -44,18 +43,14 @@ public class AddingAFooter {
      *  @return
      *  @throws InvalidFormatException
      */
-    public static Relationship createFooterPart(WordprocessingMLPackage wordMLPackage ,String content) throws Exception {
-        FooterPart footerPart = new FooterPart();
+    public static Relationship createHeaderPart(WordprocessingMLPackage wordMLPackage , String content) throws Exception {
+        HeaderPart headerPart = new HeaderPart();
 
-        footerPart.setPackage(wordMLPackage);
+        headerPart.setPackage(wordMLPackage);
 
-        P p = newImage(wordMLPackage, footerPart, "src\\main\\resources\\images\\中自庆安.png");
+        headerPart.setJaxbElement(createHeader(content));
 
-        //插入内容和图片
-        footerPart.setJaxbElement(createFooter(content,p));
-
-
-        return wordMLPackage.getMainDocumentPart().addTargetPart(footerPart);
+        return wordMLPackage.getMainDocumentPart().addTargetPart(headerPart);
     }
     /**
      * 创建包含图片的内容
@@ -98,39 +93,39 @@ public class AddingAFooter {
      *  @param content
      *  @return
      */
-    public static Ftr createFooter(String content,P p) {
-        Ftr footer = factory.createFtr();
-        //文本内容
+    public static Hdr createHeader(String content) {
+        Hdr header = factory.createHdr();
         P paragraph = factory.createP();
         R run = factory.createR();
         RPr rPr = factory.createRPr();
         Text text = new Text();
         text.setValue(content);
-        Docx4jUtil.setFontSize(rPr,"14");
-        //去掉段落空行
-        PPr paragraphPPr = paragraph.getPPr();
-        if (paragraphPPr==null){
-            paragraphPPr =factory.createPPr();
-        }
-        Docx4jUtil.setSpacing(paragraphPPr);
+        Docx4jUtil.setFontSize(rPr,"20");
+        Docx4jUtil.setFont(rPr, "黑体");
+        Docx4jUtil.setFontColor(rPr, false, "#0070c0");
+        Jc jc = new Jc();
+        jc.setVal(JcEnumeration.RIGHT);
+        PPr pPr = factory.createPPr();
+        pPr.setJc(jc);
+
 
         run.getContent().add(rPr);
         run.getContent().add(text);
-        paragraph.setPPr(paragraphPPr);
+        paragraph.setPPr(pPr);
         paragraph.getContent().add(run);
-        //设置插入图片对齐方式
-        PPr pPr = p.getPPr();
-        if (pPr==null){
-            pPr = new PPr();
-        }
-        Jc jc = new Jc();
-        jc.setVal(JcEnumeration.RIGHT);
-        pPr.setJc(jc);
-        p.setPPr(pPr);
+        header.getContent().add(paragraph);
+        return header;
+    }
 
-        footer.getContent().add(paragraph);
-        footer.getContent().add(p);
-        return footer;
+    /**
+     * 将普片插入页眉中
+     * @param p
+     * @return
+     */
+    public static Hdr createImageHeader(P p) {
+        Hdr header = factory.createHdr();
+        header.getContent().add(p);
+        return header;
     }
 
     /**
@@ -145,7 +140,7 @@ public class AddingAFooter {
      *
      * @param relationship
      */
-    public static void createFooterReference(WordprocessingMLPackage wordMLPackage,Relationship relationship) {
+    public static void createHeaderReference(WordprocessingMLPackage wordMLPackage, Relationship relationship) {
         List<SectionWrapper> sections =
                 wordMLPackage.getDocumentModel().getSections();
 
@@ -157,9 +152,9 @@ public class AddingAFooter {
             sections.get(sections.size() - 1).setSectPr(sectionProperties);
         }
 
-        FooterReference footerReference = factory.createFooterReference();
-        footerReference.setId(relationship.getId());
-        footerReference.setType(HdrFtrRef.DEFAULT);
-        sectionProperties.getEGHdrFtrReferences().add(footerReference);
+        HeaderReference headerReference = factory.createHeaderReference();
+        headerReference.setId(relationship.getId());
+        headerReference.setType(HdrFtrRef.DEFAULT);
+        sectionProperties.getEGHdrFtrReferences().add(headerReference);
     }
 }

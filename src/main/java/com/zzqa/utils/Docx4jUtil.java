@@ -41,16 +41,53 @@ public class Docx4jUtil {
     }
 
     /**
-     * @Description: 设置字体大小
+     * 设置字体大小
+     * @param rPr
+     * @param size
      */
-    public static void setFontSize(RPr runProperties, String fontSize) {
-        if (StringUtils.isNotBlank(fontSize)) {
-            HpsMeasure size = new HpsMeasure();
-            size.setVal(new BigInteger(fontSize));
-            runProperties.setSz(size);
-            runProperties.setSzCs(size);
+    public static void setFontSize(RPr rPr,String size){
+        if (StringUtils.isNotBlank(size)) {
+            HpsMeasure fontSize = new HpsMeasure();
+            fontSize.setVal(new BigInteger(size));
+            rPr.setSzCs(fontSize);
+            rPr.setSz(fontSize);
         }
     }
+
+
+    /**
+     * 设置字体
+     * @param rPr
+     * @param font
+     */
+    public static void setFont(RPr rPr,String font){
+        if (StringUtils.isNotBlank(font)){
+            RFonts rFonts = new RFonts();
+            rFonts.setEastAsia(font);
+            rPr.setRFonts(rFonts);
+        }
+    }
+
+    /**
+     * 设置字体颜色，加粗
+     * @param rPr
+     * @param color
+     */
+    public static void setFontColor(RPr rPr, boolean isBold, String color){
+        if (StringUtils.isNotBlank(color)) {
+            Color c = new Color();
+            c.setVal(color);
+            rPr.setColor(c);
+        }
+        if (isBold){
+            //设置加粗
+            BooleanDefaultTrue booleanDefaultTrue = objectFactory.createBooleanDefaultTrue();
+            booleanDefaultTrue.setVal(Boolean.TRUE);
+            rPr.setB(booleanDefaultTrue);
+        }
+    }
+
+
 
     /**
      * 添加图片到文档中
@@ -66,7 +103,6 @@ public class Docx4jUtil {
         P p = addInlineImageToParagraph(imageInline);
 
         wpMLPackage.getMainDocumentPart().addObject(p);
-
     }
 
     /**
@@ -157,6 +193,19 @@ public class Docx4jUtil {
         rPr.setColor(color);
         r.getContent().add(rPr);
         return r;
+    }
+
+    /**
+     * 清除段落后空行
+     * @param pPr
+     */
+    public static void setSpacing(PPr pPr){
+        PPrBase.Spacing spacing = pPr.getSpacing();
+        if (spacing==null){
+            spacing = new PPrBase.Spacing();
+        }
+        spacing.setAfter(new BigInteger("0"));
+        pPr.setSpacing(spacing);
     }
 
     /**
