@@ -46,12 +46,20 @@ public class Docx4j2WordMain {
             Cover cover = new Cover();
             //创建封面
             wpMLPackage = cover.createCover(wpMLPackage,reportName,startTime, endTime, logoPath,linePath);
-            //文章内容1:项目概述
+            //添加目录
+            AddingTableOfContent.addTableOfContent(wpMLPackage);
+            //文件内容1:项目概述
             PageContent1 pageContent1 = new PageContent1();
             pageContent1.createPageContent1(wpMLPackage,reportName,normalPart,warningPart,alarmPart);
-            //文本内容2:运行状况
+            //文件内容2:运行状况
             PageContent2 pageContent2 = new PageContent2();
             pageContent2.createPageContent2(wpMLPackage, unitInfos);
+            //文件内容3：震动图谱
+            PageContent3 pageContent3 = new PageContent3();
+            pageContent3.createPageContent3(wpMLPackage);
+            //文件内容4：补充说明
+            PageContent4 pageContent4 = new PageContent4();
+            pageContent4.createPageContent4(wpMLPackage);
 
             //保存文件
             wpMLPackage.save(new File(targetFilePath));

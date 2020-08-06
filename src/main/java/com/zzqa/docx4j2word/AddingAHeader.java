@@ -35,14 +35,7 @@ public class AddingAHeader {
 
     private static ObjectFactory factory= Context.getWmlObjectFactory();
 
-    /**
-     *  This method creates a footer part and set the package on it. Then we add some
-     *  text and add the footer part to the package. Finally we return the
-     *  corresponding relationship.
-     *
-     *  @return
-     *  @throws InvalidFormatException
-     */
+
     public static Relationship createHeaderPart(WordprocessingMLPackage wordMLPackage , String content) throws Exception {
         HeaderPart headerPart = new HeaderPart();
 
@@ -84,15 +77,6 @@ public class AddingAHeader {
         return p;
     }
 
-    /**
-     *  First we create a footer, a paragraph, a run and a text. We add the given
-     *  given content to the text and add that to the run. The run is then added to
-     *  the paragraph, which is in turn added to the footer. Finally we return the
-     *  footer.
-     *
-     *  @param content
-     *  @return
-     */
     public static Hdr createHeader(String content) {
         Hdr header = factory.createHdr();
         P paragraph = factory.createP();
@@ -128,18 +112,7 @@ public class AddingAHeader {
         return header;
     }
 
-    /**
-     *  First we retrieve the document sections from the package. As we want to add
-     *  a footer, we get the last section and take the section properties from it.
-     *  The section is always present, but it might not have properties, so we check
-     *  if they exist to see if we should create them. If they need to be created,
-     *  we do and add them to the main document part and the section.
-     *  Then we create a reference to the footer, give it the id of the relationship,
-     *  set the type to header/footer reference and add it to the collection of
-     *  references to headers and footers in the section properties.
-     *
-     * @param relationship
-     */
+
     public static void createHeaderReference(WordprocessingMLPackage wordMLPackage, Relationship relationship) {
         List<SectionWrapper> sections =
                 wordMLPackage.getDocumentModel().getSections();

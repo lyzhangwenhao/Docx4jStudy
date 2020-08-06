@@ -74,7 +74,7 @@ public class DrawChartPieUtil {
             //保存图表为一个File文件类型
             ImageIO.write(bufferedImage, "png", file);
             //TODO 删除输出语句
-            System.out.println("完成！");
+            System.out.println("饼状图完成！");
         } catch (IOException e) {
             e.printStackTrace();
         }

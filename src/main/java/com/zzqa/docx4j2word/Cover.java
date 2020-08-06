@@ -43,7 +43,7 @@ public class Cover {
             Docx4jUtil.addImageToPackage(wpMLPackage, linePngBytes);
 
             //加入换行
-            addBr(wpMLPackage,1);
+            Docx4jUtil.addBr(wpMLPackage,1);
 
             //封面标题
             addTitleWordToPackage(wpMLPackage, reportName);
@@ -51,11 +51,11 @@ public class Cover {
             addTitleWordToPackage(wpMLPackage, "检测报告");
 
             //插入换行符
-            addBr(wpMLPackage,2);
+            Docx4jUtil.addBr(wpMLPackage,2);
             //横线插入
             Docx4jUtil.addImageToPackage(wpMLPackage, linePngBytes);
             //插入换行符
-            addBr(wpMLPackage,1);
+            Docx4jUtil.addBr(wpMLPackage,1);
 
             //向封面插入小标题
             addTitleLittle(wpMLPackage,"浙江中自庆安新能源技术有限公司");
@@ -177,23 +177,6 @@ public class Cover {
         wpMLPackage.getMainDocumentPart().addObject(para);
 
     }
-    /**
-     * 添加换行符
-     * @param wpMLPackage
-     * @param brNum 换行数量
-     */
-    public void addBr(WordprocessingMLPackage wpMLPackage, int brNum){
-        P para = objectFactory.createP();
-        R run = objectFactory.createR();
-        Br br = new Br();
-        //循环插入
-        for (int i=0; i<brNum; i++){
-            run.getContent().add(br);
-        }
-        para.getContent().add(run);
-        wpMLPackage.getMainDocumentPart().addObject(para);
-    }
-
 
     /**
      * 封面标题

@@ -29,7 +29,6 @@ public class PageContent1 {
     public void createPageContent1(WordprocessingMLPackage wpMLPackage,
                                                       String proName, int normalPart, int warningPart, int alarmPart){
         try {
-            //TODO 页脚和页眉没做完，目前达不到要求，抽空继续做，先将核心内容完成
             Relationship relationship = AddingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司\r" +
                     "◆ 我们保留本文档和信息的全部所有权利。未经明示授权，严禁复制、使用或披露给第三方。");
             AddingAFooter.createFooterReference(wpMLPackage,relationship);
@@ -67,7 +66,7 @@ public class PageContent1 {
      * @param wpMLPackage
      * @param content
      */
-    public void addParagraph(WordprocessingMLPackage wpMLPackage,String content){
+    private void addParagraph(WordprocessingMLPackage wpMLPackage,String content){
         P p = objectFactory.createP();
         R r = objectFactory.createR();
         PPr pPr = p.getPPr();

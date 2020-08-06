@@ -37,7 +37,7 @@ public class PageContent2 {
     /**
      * @Description: 跨行合并
      */
-    public void mergeCellsVertically(Tbl tbl, int col, int fromRow, int toRow) {
+    private void mergeCellsVertically(Tbl tbl, int col, int fromRow, int toRow) {
         if (col < 0 || fromRow < 0 || toRow < 0) {
             return;
         }
@@ -63,7 +63,7 @@ public class PageContent2 {
     /**
      * @Description: 得到表格所有的行
      */
-    public List<Tr> getTblAllTr(Tbl tbl) {
+    private List<Tr> getTblAllTr(Tbl tbl) {
         List<Object> objList = getAllElementFromObject(tbl, Tr.class);
         List<Tr> trList = new ArrayList<Tr>();
         if (objList == null) {
@@ -82,7 +82,7 @@ public class PageContent2 {
     /**
      * @Description:得到指定位置的单元格
      */
-    public Tc getTc(Tbl tbl, int row, int cell) {
+    private Tc getTc(Tbl tbl, int row, int cell) {
         if (row < 0 || cell < 0) {
             return null;
         }
@@ -99,7 +99,7 @@ public class PageContent2 {
     /**
      * @Description:得到所有表格
      */
-    public List<Tbl> getAllTbl(WordprocessingMLPackage wordMLPackage) {
+    private List<Tbl> getAllTbl(WordprocessingMLPackage wordMLPackage) {
         MainDocumentPart mainDocPart = wordMLPackage.getMainDocumentPart();
         List<Object> objList = getAllElementFromObject(mainDocPart, Tbl.class);
         if (objList == null) {
@@ -118,7 +118,7 @@ public class PageContent2 {
     /**
      * @Description: 获取所有的单元格
      */
-    public List<Tc> getTrAllCell(Tr tr) {
+    private List<Tc> getTrAllCell(Tr tr) {
         List<Object> objList = getAllElementFromObject(tr, Tc.class);
         List<Tc> tcList = new ArrayList<Tc>();
         if (objList == null) {
@@ -182,8 +182,9 @@ public class PageContent2 {
         //表格表头
         addTableTc(tr, "报警机组",1100,true,"black");
         addTableTc(tr, "报警部件",1500,true,"black");
-        addTableTc(tr, "报警次数", 1100,true,"black");
-        addTableTc(tr, "触发报警门限及类型",2200,true,"black");
+        addTableTc(tr, "报警次数",1100,true,"black");
+        addTableTc(tr, "报警门限",1100,true,"black");
+        addTableTc(tr, "报警类型",1100,true,"black");
         addTableTc(tr, "最大报警特征值", 1800,true,"black");
         addTableTc(tr, "报警等级", 1100,true,"black");
         //将tr添加到table中
@@ -195,12 +196,18 @@ public class PageContent2 {
      * @param tableRow
      * @param content
      */
-    public void addTableTc(Tr tableRow, String content, int width, boolean isBold, String color){
+    private void addTableTc(Tr tableRow, String content, int width, boolean isBold, String color){
         Tc tc = factory.createTc();
         P p = factory.createP();
         R r = factory.createR();
         RPr rPr = factory.createRPr();
         Text text = factory.createText();
+        BooleanDefaultTrue bCs = rPr.getBCs();
+        if (bCs==null){
+            bCs = new BooleanDefaultTrue();
+        }
+        bCs.setVal(true);
+        rPr.setBCs(bCs);
 
         //设置宽度
         setCellWidth(tc, width);
@@ -265,7 +272,7 @@ public class PageContent2 {
         borders.setInsideV(border);
         table.getTblPr().setTblBorders(borders);
     }
-    public TcPr getTcPr(Tc tc) {
+    private TcPr getTcPr(Tc tc) {
         TcPr tcPr = tc.getTcPr();
         if (tcPr == null) {
             tcPr = new TcPr();
@@ -276,7 +283,7 @@ public class PageContent2 {
     /**
      * @Description: 设置单元格垂直对齐方式
      */
-    public void setTcVAlign(Tc tc, STVerticalJc vAlignType) {
+    private void setTcVAlign(Tc tc, STVerticalJc vAlignType) {
         if (vAlignType != null) {
             TcPr tcPr = getTcPr(tc);
             CTVerticalJc vAlign = new CTVerticalJc();
@@ -287,7 +294,7 @@ public class PageContent2 {
     /**
      * @Description: 设置单元格水平对齐方式
      */
-    public void setTcJcAlign(Tc tc, JcEnumeration jcType) {
+    private void setTcJcAlign(Tc tc, JcEnumeration jcType) {
         if (jcType != null) {
             List<P> pList = getTcAllP(tc);
             for (P p : pList) {
@@ -295,7 +302,7 @@ public class PageContent2 {
             }
         }
     }
-    public List<P> getTcAllP(Tc tc) {
+    private List<P> getTcAllP(Tc tc) {
         List<Object> objList = getAllElementFromObject(tc, P.class);
         List<P> pList = new ArrayList<P>();
         if (objList == null) {
@@ -312,7 +319,7 @@ public class PageContent2 {
     /**
      * @Description: 得到指定类型的元素
      */
-    public static List<Object> getAllElementFromObject(Object obj, Class<?> toSearch) {
+    private static List<Object> getAllElementFromObject(Object obj, Class<?> toSearch) {
         List<Object> result = new ArrayList<Object>();
         if (obj instanceof JAXBElement)
             obj = ((JAXBElement<?>) obj).getValue();
@@ -330,7 +337,7 @@ public class PageContent2 {
     /**
      * @Description: 设置段落水平对齐方式
      */
-    public void setParaJcAlign(P paragraph, JcEnumeration hAlign) {
+    private void setParaJcAlign(P paragraph, JcEnumeration hAlign) {
         if (hAlign != null) {
             PPr pprop = paragraph.getPPr();
             if (pprop == null) {

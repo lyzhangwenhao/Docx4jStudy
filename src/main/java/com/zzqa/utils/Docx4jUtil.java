@@ -39,6 +39,22 @@ public class Docx4jUtil {
         para.setPPr(pPr);
         wpMLPackage.getMainDocumentPart().addObject(para);
     }
+    /**
+     * 添加换行符
+     * @param wpMLPackage
+     * @param brNum 换行数量
+     */
+    public static void addBr(WordprocessingMLPackage wpMLPackage, int brNum){
+        P para = objectFactory.createP();
+        R run = objectFactory.createR();
+        Br br = new Br();
+        //循环插入
+        for (int i=0; i<brNum; i++){
+            run.getContent().add(br);
+        }
+        para.getContent().add(run);
+        wpMLPackage.getMainDocumentPart().addObject(para);
+    }
 
     /**
      * 设置字体大小
