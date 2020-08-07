@@ -1,20 +1,25 @@
 package test.com.zzqa.utils;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.general.DatasetUtilities;
+import org.jfree.data.xy.XYDataset;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.*;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.DatasetUtilities;
 
 /**
  * ClassName: DrawChartLine
@@ -23,7 +28,7 @@ import org.jfree.data.general.DatasetUtilities;
  * @author 张文豪
  * @date 2020/8/6 9:24
  */
-public class DrawChartLine {
+public class DrawChartXYLine {
     /**
      * 创建JFreeChart Line Chart（折线图）
      */
@@ -69,8 +74,12 @@ public class DrawChartLine {
 
     // 根据CategoryDataset创建JFreeChart对象
     public static JFreeChart createChart(CategoryDataset categoryDataset) {
-        // 创建JFreeChart对象：ChartFactory.createLineChart
-        JFreeChart jfreechart = ChartFactory.createLineChart("波形图", // 标题
+
+
+
+
+//      创建JFreeChart对象：ChartFactory.createLineChart
+        JFreeChart jfreechart = ChartFactory.createLineChart("包络图X", // 标题
                 "s", // categoryAxisLabel （category轴，横轴，X轴标签）
                 "g", // valueAxisLabel（value轴，纵轴，Y轴的标签）
                 categoryDataset, // dataset
@@ -91,17 +100,12 @@ public class DrawChartLine {
         // 设置距离图片右端距离
         domainAxis.setUpperMargin(0.0);
         //隐藏坐标轴标尺
-//        domainAxis.setTickLabelsVisible(false);
-
-
-//        setDomainAxis(domainAxis, 1000);
-
+        domainAxis.setTickLabelsVisible(false);
+        setDomainAxis(domainAxis, 200);
 //        domainAxis.setTickLabelPaint( Integer.toString(20),Color.blue);
-
-
-
         //设置最大行数（X轴显示）
 //        domainAxis.setMaximumCategoryLabelLines(1);
+        domainAxis.setMaximumCategoryLabelWidthRatio(200f);
 
         // 设置Y轴
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -130,9 +134,9 @@ public class DrawChartLine {
      */
     public static CategoryDataset createDataset() {
         String[] rowKeys = {""};
-        String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\波形图X.txt");
+        String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\包络图X.txt");
         String[] colKeys = dataX.split(",");
-        String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\波形图Y.txt");
+        String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\包络图Y.txt");
         String[] split = dataY.split(",");
         double[] dataTemp = new double[split.length];
         for (int i=0;i<split.length;i++){
@@ -156,9 +160,9 @@ public class DrawChartLine {
         for(int i = 0; i<max; i++)
         {
             //设置0-max显示10个刻度，可自选
-            if(i%(max/10) ==0)
+            if((i>10||i==0) && i%(max/10) ==0)
             {
-                domainAxis.setTickLabelPaint(Integer.toString(i), Color.black);
+                domainAxis.setTickLabelPaint(Integer.toString(i), Color.BLUE);
             }else{
                 domainAxis.setTickLabelPaint(Integer.toString(i), Color.white);
             }

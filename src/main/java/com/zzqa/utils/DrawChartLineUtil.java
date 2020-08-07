@@ -99,6 +99,8 @@ public class DrawChartLineUtil {
         domainAxis.setLowerMargin(0.0);
         // 设置距离图片右端距离
         domainAxis.setUpperMargin(0.0);
+        //隐藏坐标轴标尺
+        domainAxis.setTickLabelsVisible(false);
 
         //设置最大行数（X轴显示）
 //        domainAxis.setMaximumCategoryLabelLines(1);
