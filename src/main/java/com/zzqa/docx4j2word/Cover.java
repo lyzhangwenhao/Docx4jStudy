@@ -65,7 +65,7 @@ public class Cover {
             addTitleLittle(wpMLPackage, Docx4jUtil.getDate(new Date()));
 
             //下一页
-            addNextPage(wpMLPackage);
+            Docx4jUtil.addNextSection(wpMLPackage);
 
 //            wpMLPackage.save(new File("D:/TestFile/文件1.docx"));
             //TODO 删除输出语句
@@ -137,7 +137,6 @@ public class Cover {
         Text text = objectFactory.createText();
         //添加标题内容
         text.setValue(word);
-        run.getContent().add(text);
         //设置居中格式
         PPr pPr = objectFactory.createPPr();
         Jc jc = pPr.getJc();
@@ -148,9 +147,10 @@ public class Cover {
 
         RPr rPr = objectFactory.createRPr();
         //设置颜色
-        Color color = new Color();
-        color.setVal("#0070c0");
-        rPr.setColor(color);
+        Docx4jUtil.setFontColor(rPr, true, "#0070c0");
+//        Color color = new Color();
+//        color.setVal("#0070c0");
+//        rPr.setColor(color);
         //设置字体大小
         HpsMeasure fontSize = new HpsMeasure();
         fontSize.setVal(new BigInteger("28"));
@@ -158,9 +158,9 @@ public class Cover {
         rPr.setSz(fontSize);
 
         //设置加粗
-        BooleanDefaultTrue booleanDefaultTrue = objectFactory.createBooleanDefaultTrue();
-        booleanDefaultTrue.setVal(Boolean.TRUE);
-        rPr.setB(booleanDefaultTrue);
+//        BooleanDefaultTrue booleanDefaultTrue = objectFactory.createBooleanDefaultTrue();
+//        booleanDefaultTrue.setVal(Boolean.TRUE);
+//        rPr.setB(booleanDefaultTrue);
 
         //设置字体
         RFonts rFonts = new RFonts();
@@ -171,6 +171,7 @@ public class Cover {
         //将格式和内容添加进para
         pPr.setJc(jc);
         run.getContent().add(rPr);
+        run.getContent().add(text);
         para.setPPr(pPr);
         para.getContent().add(run);
 
@@ -197,10 +198,11 @@ public class Cover {
         //设置居中
         jc.setVal(JcEnumeration.CENTER);
         pPr.setJc(jc);
-        //设置字体大小
+        //设置字体
         RPr rPr = new RPr();
         rPr.setB(Context.getWmlObjectFactory().createBooleanDefaultTrue());
         Docx4jUtil.setFontSize(rPr, "50");
+        Docx4jUtil.setFont(rPr, "宋体");
         run.setRPr(rPr);
 
 

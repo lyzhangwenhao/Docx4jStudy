@@ -28,6 +28,18 @@ public class Docx4jUtil {
      * @param wpMLPackage
      */
     public static void addNextPage(WordprocessingMLPackage wpMLPackage){
+        Br br = new Br();
+        br.setType(STBrType.PAGE);
+        P p = objectFactory.createP();
+        p.getContent().add(br);
+        wpMLPackage.getMainDocumentPart().addObject(p);
+//        wpMLPackage.getMainDocumentPart().getJaxbElement().getBody().getContent().add(p);
+    }
+    /**
+     * 插入下一节
+     * @param wpMLPackage
+     */
+    public static void addNextSection(WordprocessingMLPackage wpMLPackage){
         P para = objectFactory.createP();
         SectPr sectPr = objectFactory.createSectPr();
         PPr pPr = objectFactory.createPPr();

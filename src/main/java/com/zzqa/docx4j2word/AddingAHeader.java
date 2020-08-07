@@ -40,8 +40,13 @@ public class AddingAHeader {
         HeaderPart headerPart = new HeaderPart();
 
         headerPart.setPackage(wordMLPackage);
+        //对字符串进行处理，如果出现&&标识则表示换行
+        String[] split = {};
+        if (content!=null){
+             split = content.split("&&");
+        }
 
-        headerPart.setJaxbElement(createHeader(content));
+        headerPart.setJaxbElement(createHeader(split));
 
         return wordMLPackage.getMainDocumentPart().addTargetPart(headerPart);
     }
@@ -77,24 +82,36 @@ public class AddingAHeader {
         return p;
     }
 
-    public static Hdr createHeader(String content) {
+    public static Hdr createHeader(String[] split) {
         Hdr header = factory.createHdr();
         P paragraph = factory.createP();
         R run = factory.createR();
         RPr rPr = factory.createRPr();
-        Text text = new Text();
-        text.setValue(content);
+
         Docx4jUtil.setFontSize(rPr,"20");
         Docx4jUtil.setFont(rPr, "黑体");
         Docx4jUtil.setFontColor(rPr, false, "#0070c0");
+
+
+        run.getContent().add(rPr);
+        for (int i=0;i<split.length;i++){
+            Text text = new Text();
+            text.setValue(split[i]);
+            run.getContent().add(text);
+            if (i!=split.length-1){
+                Br br = new Br();
+                run.getContent().add(br);
+            }
+
+        }
+
+
         Jc jc = new Jc();
         jc.setVal(JcEnumeration.RIGHT);
         PPr pPr = factory.createPPr();
         pPr.setJc(jc);
 
-
-        run.getContent().add(rPr);
-        run.getContent().add(text);
+//        run.getContent().add(text);
         paragraph.setPPr(pPr);
         paragraph.getContent().add(run);
         header.getContent().add(paragraph);

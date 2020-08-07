@@ -45,7 +45,12 @@ public class AddingAFooter {
         P p = newImage(wordMLPackage, footerPart, "src\\main\\resources\\images\\中自庆安.png");
 
         //插入内容和图片
-        footerPart.setJaxbElement(createFooter(content,p));
+        //对字符串进行处理，如果出现&&标识则表示换行
+        String[] split = {};
+        if (content!=null){
+            split = content.split("&&");
+        }
+        footerPart.setJaxbElement(createFooter(split,p));
 
 
         return wordMLPackage.getMainDocumentPart().addTargetPart(footerPart);
@@ -83,14 +88,12 @@ public class AddingAFooter {
     }
 
 
-    public static Ftr createFooter(String content,P p) {
+    public static Ftr createFooter(String[] split,P p) {
         Ftr footer = factory.createFtr();
         //文本内容
         P paragraph = factory.createP();
         R run = factory.createR();
         RPr rPr = factory.createRPr();
-        Text text = new Text();
-        text.setValue(content);
         Docx4jUtil.setFontSize(rPr,"14");
         //去掉段落空行
         PPr paragraphPPr = paragraph.getPPr();
@@ -98,9 +101,19 @@ public class AddingAFooter {
             paragraphPPr =factory.createPPr();
         }
         Docx4jUtil.setSpacing(paragraphPPr);
-
         run.getContent().add(rPr);
-        run.getContent().add(text);
+
+        for (int i=0;i<split.length;i++){
+            Text text = new Text();
+            text.setValue(split[i]);
+            run.getContent().add(text);
+            if (i!=split.length-1){
+                Br br = new Br();
+                run.getContent().add(br);
+            }
+
+        }
+
         paragraph.setPPr(paragraphPPr);
         paragraph.getContent().add(run);
         //设置插入图片对齐方式

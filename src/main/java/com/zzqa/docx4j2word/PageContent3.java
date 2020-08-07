@@ -55,10 +55,8 @@ public class PageContent3 {
 
         //4、包络图
 
-        wpMLPackage.getMainDocumentPart().addParagraphOfText("Footer");
-        wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("ListNumber", "内容");
         //下一页
-//        Docx4jUtil.addNextPage(wpMLPackage);
+        Docx4jUtil.addNextPage(wpMLPackage);
     }
 
     /**
@@ -78,19 +76,4 @@ public class PageContent3 {
         double[][] data = {dataTemp};
         return data;
     }
-/*
-    String[] rowKeys = {""};
-    String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\波形图X.txt");
-    String[] colKeys = dataX.split(",");
-
-    String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\波形图Y.txt");
-    String[] split = dataY.split(",");
-    double[] dataTemp = new double[split.length];
-        for (int i=0;i<split.length;i++){
-        if (split[i]!=null){
-            dataTemp[i] = Double.parseDouble(split[i]);
-        }
-    }
-    double[][] data = {dataTemp};
-*/
 }

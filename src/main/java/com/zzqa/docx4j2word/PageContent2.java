@@ -213,7 +213,6 @@ public class PageContent2 {
         setCellWidth(tc, width);
         //生成段落添加到单元格中
         text.setValue(content);
-        r.getContent().add(text);
         //设置字体颜色，加粗
         Docx4jUtil.setFontColor(rPr, isBold, color);
         //设置字体
@@ -222,6 +221,8 @@ public class PageContent2 {
         Docx4jUtil.setFontSize(rPr, "20");
         //将样式添加到段落中
         r.getContent().add(rPr);
+
+        r.getContent().add(text);
         p.getContent().add(r);
         tc.getContent().add(p);
         //设置垂直居中

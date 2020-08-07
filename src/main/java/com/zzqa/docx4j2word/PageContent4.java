@@ -22,22 +22,12 @@ public class PageContent4 {
 
             //添加标题四：补充说明
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "4 补充说明");
-
-            SdtContentBlock sdtContentBlock = factory.createSdtContentBlock();
-            P p = factory.createP();
-            R r = factory.createR();
-            Text text = factory.createText();
-            text.setValue("123");
-            r.getContent().add(text);
-            p.getContent().add(r);
-            sdtContentBlock.getContent().add(p);
-            wpMLPackage.getMainDocumentPart().addObject(sdtContentBlock);
             addParagraph(wpMLPackage, "(1) 本报告涂改无效。");
             addParagraph(wpMLPackage, "(2) 未经本中心书面许可，部分复制、摘用或篡改本报告内容，引起法律纠纷，责任自负。");
             addParagraph(wpMLPackage, "(3) 本监测报告是基于对机组所安装的CMS系统的振动数据所获得的信息自动生成的，因此，本报告对机组状态所做分析仅供参考。对于设备状况的最终判断以及所需采取的维护措施，可参考诊断分析报告，最终由用户自行决定。");
             addParagraph(wpMLPackage, "(4) 对检测报告若有异议，请于收到报告之日起一个月内向本中心提出，逾期不再受理。");
 
-            Docx4jUtil.addBr(wpMLPackage, 25);
+            Docx4jUtil.addBr(wpMLPackage, 20);
             addParagraph(wpMLPackage, "地址：杭州经济技术开发区6号路260号中自科技园");
             addParagraph(wpMLPackage, "邮编：310018");
             addParagraph(wpMLPackage, "电话：0571-28995840");
