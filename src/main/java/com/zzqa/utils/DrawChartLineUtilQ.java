@@ -1,19 +1,13 @@
 package com.zzqa.utils;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -22,9 +16,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * ClassName: DrawChartLine
@@ -33,7 +27,7 @@ import java.io.IOException;
  * @author 张文豪
  * @date 2020/8/6 9:24
  */
-public class DrawChartLineUtil {
+public class DrawChartLineUtilQ {
 
     /**
      * 传入数据生成折线图
@@ -55,7 +49,7 @@ public class DrawChartLineUtil {
         // 步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置
         JFreeChart freeChart = createChart(dataset,title,xUnit,yUnit);
         //步骤3：将JFreeChart对象保存为一个文件
-        BufferedImage bufferedImage = freeChart.createBufferedImage(600, 300);
+        BufferedImage bufferedImage = freeChart.createBufferedImage(800, 500);
         //确定图表文件存在的位置，如果文件夹路径不存在则创建一个
         File mkdirPath = new File("D:/chart/lineChart");
         if(!mkdirPath.exists() && !mkdirPath.isDirectory()){
@@ -101,10 +95,10 @@ public class DrawChartLineUtil {
         // 前景色 透明度
         plot.setForegroundAlpha(0.5f);
 
-        NumberAxis numberAxis = new NumberAxis();
-        //X轴坐标箭头
-        numberAxis.setPositiveArrowVisible(true);
-        plot.setDomainAxis(numberAxis);
+        DateAxis domainAxis = (DateAxis)plot.getDomainAxis();
+        domainAxis.setPositiveArrowVisible(true);
+        domainAxis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));
+        domainAxis.setMinorTickCount(8);
 
         // 设置Y轴
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -127,9 +121,14 @@ public class DrawChartLineUtil {
     public static XYDataset createDataset(String rowKey,String[] colKeys,double[][] data) {
         XYSeries first = new XYSeries(rowKey);
         for (int i=0;i<colKeys.length;i++){
-            first.add(Double.parseDouble(colKeys[i]),data[0][i]);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+            simpleDateFormat.applyPattern("yyyy/MM/dd HH:mm");
+            try {
+                first.add(simpleDateFormat.parse(colKeys[i]).getTime(),data[0][i]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
         xySeriesCollection.addSeries(first);
         return xySeriesCollection;

@@ -16,6 +16,11 @@ import java.math.BigInteger;
  */
 public class PageContent4 {
     private ObjectFactory factory = new ObjectFactory();
+
+    /**
+     * 固定的第四部分内容
+     * @param wpMLPackage
+     */
     public void createPageContent4(WordprocessingMLPackage wpMLPackage){
         Relationship relationship = null;
         try {
@@ -32,6 +37,8 @@ public class PageContent4 {
             addParagraph(wpMLPackage, "邮编：310018");
             addParagraph(wpMLPackage, "电话：0571-28995840");
             addParagraph(wpMLPackage, "传真：0571-28995841");
+            //TODO 删除输出语句
+            System.out.println("PageContent4 Success......");
         } catch (Exception e) {
             e.printStackTrace();
         }

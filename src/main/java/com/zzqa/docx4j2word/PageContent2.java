@@ -20,6 +20,12 @@ import java.util.List;
  */
 public class PageContent2 {
     private ObjectFactory factory = new ObjectFactory();
+
+    /**
+     * 生成预警/报警的表格信息
+     * @param wpMLPackage 传入的wpMLPackage对象
+     * @param unitInfos 生成表格的数据，其中UnitInfo对象里面的四个colKeys与data[0]必须一一对应，并且按照colKeys升序排列(包括时间，字符串，数值)数据类型为String
+     */
     public void createPageContent2(WordprocessingMLPackage wpMLPackage, List<UnitInfo> unitInfos){
         //添加标题一：项目概述
         wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "2 运行状况");
@@ -30,6 +36,8 @@ public class PageContent2 {
         createTalbeTitle(wpMLPackage,tbl);
         //生成数据
         createTableDate(wpMLPackage,tbl, unitInfos);
+        //TODO 删除输出语句
+        System.out.println("PageContent2 Success......");
         //跨行合并
 //        mergeCellsVertically(tbl,0, 1, 2);
     }
@@ -144,21 +152,23 @@ public class PageContent2 {
         if (unitInfos!=null){
             Tr dateTr =null;
             for (UnitInfo unitInfo:unitInfos){
-                dateTr = factory.createTr();
-                addTableTc(dateTr, unitInfo.getUnitName(), 1100, false, "black");
-                addTableTc(dateTr, unitInfo.getUnitPart(), 1500, false, "black");
-                addTableTc(dateTr, String.valueOf(unitInfo.getCount()), 1100, false, "black");
-                addTableTc(dateTr, unitInfo.getValve(), 1100, false, "black");
-                addTableTc(dateTr, unitInfo.getType(), 1100, false, "black");
-                addTableTc(dateTr, unitInfo.getMaxValue(), 1800, false, "black");
-                //根据报警等级添加
-                if ("预警".equals(unitInfo.getLevel())){
-                    addTableTc(dateTr, unitInfo.getLevel(), 1100, true, "#92d050");
-                }else if ("报警".equals(unitInfo.getLevel())){
-                    addTableTc(dateTr, unitInfo.getLevel(), 1100,true,"#ff0000");
+                if ("预警".equals(unitInfo.getLevel()) || "报警".equals(unitInfo.getLevel())){
+                    dateTr = factory.createTr();
+                    addTableTc(dateTr, unitInfo.getUnitName(), 1100, false, "black");
+                    addTableTc(dateTr, unitInfo.getUnitPart(), 1500, false, "black");
+                    addTableTc(dateTr, String.valueOf(unitInfo.getCount()), 1100, false, "black");
+                    addTableTc(dateTr, unitInfo.getValve(), 1100, false, "black");
+                    addTableTc(dateTr, unitInfo.getType(), 1100, false, "black");
+                    addTableTc(dateTr, unitInfo.getMaxValue(), 1800, false, "black");
+                    //根据报警等级添加
+                    if ("预警".equals(unitInfo.getLevel())){
+                        addTableTc(dateTr, unitInfo.getLevel(), 1100, true, "#92d050");
+                    }else if ("报警".equals(unitInfo.getLevel())){
+                        addTableTc(dateTr, unitInfo.getLevel(), 1100,true,"#ff0000");
+                    }
+                    //将tr添加到表格中
+                    tbl.getContent().add(dateTr);
                 }
-                //将tr添加到表格中
-                tbl.getContent().add(dateTr);
             }
         }
         wpMLPackage.getMainDocumentPart().addObject(tbl);

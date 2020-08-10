@@ -4,16 +4,12 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -24,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * ClassName: DrawChartLine
@@ -32,7 +30,7 @@ import java.io.IOException;
  * @author 张文豪
  * @date 2020/8/6 9:24
  */
-public class DrawChartXYLine {
+public class DrawChartXYLineQ {
     /**
      * 创建JFreeChart Line Chart（折线图）
      */
@@ -91,13 +89,11 @@ public class DrawChartXYLine {
         plot.setBackgroundAlpha(0.5f);
         // 前景色 透明度
         plot.setForegroundAlpha(0.5f);
-        plot.setDomainGridlinesVisible(false);
 
-        NumberAxis numberAxis = new NumberAxis();
-        //X轴坐标箭头
-        numberAxis.setPositiveArrowVisible(true);
-        plot.setDomainAxis(numberAxis);
-
+        DateAxis domainAxis = (DateAxis)plot.getDomainAxis();
+        domainAxis.setPositiveArrowVisible(true);
+        domainAxis.setDateFormatOverride(new SimpleDateFormat("yyyy-MM-dd"));
+        domainAxis.setMinorTickCount(8);
 
         // 设置Y轴
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -142,12 +138,18 @@ public class DrawChartXYLine {
      */
     public static XYDataset createDataset() {
         XYSeries first = new XYSeries("first");
-        String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\包络图X.txt");
+        String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\趋势图X.txt");
         String[] colKeys = dataX.split(",");
-        String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\包络图Y.txt");
+        String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\趋势图Y.txt");
         String[] split = dataY.split(",");
         for (int i=0;i<colKeys.length;i++){
-            first.add(Double.parseDouble(colKeys[i]),Double.parseDouble(split[i]));
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+            simpleDateFormat.applyPattern("yyyy/MM/dd HH:mm");
+            try {
+                first.add(simpleDateFormat.parse(colKeys[i]).getTime(),Double.parseDouble(split[i]));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();

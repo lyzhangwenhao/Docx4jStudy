@@ -33,7 +33,7 @@ public class PageContent1 {
                     "◆ 我们保留本文档和信息的全部所有权利。未经明示授权，严禁复制、使用或披露给第三方。");
             AddingAFooter.createFooterReference(wpMLPackage,relationship);
 
-            Relationship headerPart = AddingAHeader.createHeaderPart(wpMLPackage, "咨询电话：4000093668-7 &&" + "网站:www.windit.com.cn ");
+            Relationship headerPart = AddingAHeader.createHeaderPart(wpMLPackage, "杭州经济技术开发区6号路260号中自科技园1幢5楼 &&" + "传真：0571-28995841       网址：www.windit.com.cn ");
             AddingAHeader.createHeaderReference(wpMLPackage, headerPart);
 
             //添加标题一：项目概述
@@ -47,12 +47,13 @@ public class PageContent1 {
             //根据数据生成饼状图
             File pieImage = DrawChartPieUtil.getImageFile(proName, normalPart, warningPart, alarmPart);
             byte[] pieImageBytes = Docx4jUtil.convertImageToByteArray(pieImage);
+            deleteImageFile(pieImage);
             Docx4jUtil.addImageToPackage(wpMLPackage, pieImageBytes);
             //表格标题
             Docx4jUtil.addTableTitle(wpMLPackage, "图1.1 机组状态统计饼状图");
 
             //TODO 删除输出语句
-            System.out.println("PageContent Success......");
+            System.out.println("PageContent1 Success......");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,5 +98,15 @@ public class PageContent1 {
         p.getContent().add(r);
         p.setPPr(pPr);
         wpMLPackage.getMainDocumentPart().addObject(p);
+    }
+
+    /**
+     * 删除已经添加进文档中的图片
+     * @param imageFile
+     */
+    private void deleteImageFile(File imageFile){
+        if (imageFile != null && imageFile.exists()){
+            imageFile.delete();
+        }
     }
 }

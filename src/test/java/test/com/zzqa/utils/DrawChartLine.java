@@ -130,9 +130,9 @@ public class DrawChartLine {
      */
     public static CategoryDataset createDataset() {
         String[] rowKeys = {""};
-        String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\波形图X.txt");
+        String dataX = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\包络图X.txt");
         String[] colKeys = dataX.split(",");
-        String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\波形图Y.txt");
+        String dataY = LoadDataUtils.ReadFile("C:\\Users\\Mi_dad\\Desktop\\包络图Y.txt");
         String[] split = dataY.split(",");
         double[] dataTemp = new double[split.length];
         for (int i=0;i<split.length;i++){
