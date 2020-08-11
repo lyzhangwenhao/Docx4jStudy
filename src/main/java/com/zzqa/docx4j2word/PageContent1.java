@@ -29,12 +29,14 @@ public class PageContent1 {
     public void createPageContent1(WordprocessingMLPackage wpMLPackage,
                                                       String proName, int normalPart, int warningPart, int alarmPart){
         try {
-            Relationship relationship = AddingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司 &&" +
+            AddingAFooter addingAFooter = new AddingAFooter();
+            Relationship relationship = addingAFooter.createFooterPart(wpMLPackage,"◆ 版权所有 © 2018-2020 浙江中自庆安新能源技术有限公司 &&" +
                     "◆ 我们保留本文档和信息的全部所有权利。未经明示授权，严禁复制、使用或披露给第三方。");
-            AddingAFooter.createFooterReference(wpMLPackage,relationship);
+            addingAFooter.createFooterReference(wpMLPackage,relationship);
 
-            Relationship headerPart = AddingAHeader.createHeaderPart(wpMLPackage, "杭州经济技术开发区6号路260号中自科技园1幢5楼 &&" + "传真：0571-28995841       网址：www.windit.com.cn ");
-            AddingAHeader.createHeaderReference(wpMLPackage, headerPart);
+            AddingAHeader addingAHeader = new AddingAHeader();
+            Relationship headerPart = addingAHeader.createHeaderPart(wpMLPackage, "咨询电话：4000093668-7 &&" + "网址：www.windit.com.cn ");
+            addingAHeader.createHeaderReference(wpMLPackage, headerPart);
 
             //添加标题一：项目概述
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "1 项目概述");

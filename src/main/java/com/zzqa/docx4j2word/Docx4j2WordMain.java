@@ -78,6 +78,11 @@ public class Docx4j2WordMain {
         }
 
     }
+
+    /**
+     * 数据准备
+     * @return
+     */
     public static List<UnitInfo> createData(){
         List<UnitInfo> unitInfos = new ArrayList<>();
         UnitInfo unitInfo = null;
@@ -102,7 +107,7 @@ public class Docx4j2WordMain {
         String dataY4 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/包络图Y.txt");
         double[][] data4 = string2DoubleArray(dataY4);
 
-        for (int i=0; i<50;i++){
+        for (int i=0; i<20;i++){
             unitInfo = new UnitInfo();
             unitInfo.setUnitName((i+1)+"#机组");
             unitInfo.setColKeys1(colKeys1);

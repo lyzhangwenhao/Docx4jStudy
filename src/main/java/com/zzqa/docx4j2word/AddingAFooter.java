@@ -14,6 +14,7 @@ import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.*;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -24,20 +25,11 @@ import java.util.List;
  * @date 2020/8/3 10:38
  */
 public class AddingAFooter {
-    private static WordprocessingMLPackage wordMLPackage;
 
-    static {
-        try {
-            wordMLPackage = WordprocessingMLPackage.createPackage();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static ObjectFactory factory= Context.getWmlObjectFactory();
+    private ObjectFactory factory= Context.getWmlObjectFactory();
 
 
-    public static Relationship createFooterPart(WordprocessingMLPackage wordMLPackage ,String content) throws Exception {
+    public Relationship createFooterPart(WordprocessingMLPackage wordMLPackage ,String content) throws Exception {
         FooterPart footerPart = new FooterPart();
 
         footerPart.setPackage(wordMLPackage);
@@ -64,7 +56,7 @@ public class AddingAFooter {
      * @return
      * @throws Exception
      */
-    public static P newImage(WordprocessingMLPackage word,
+    private P newImage(WordprocessingMLPackage word,
                              Part sourcePart,
                              String imageFilePath) throws Exception {
         BinaryPartAbstractImage imagePart = BinaryPartAbstractImage
@@ -88,13 +80,17 @@ public class AddingAFooter {
     }
 
 
-    public static Ftr createFooter(String[] split,P p) {
+    private Ftr createFooter(String[] split,P p) {
         Ftr footer = factory.createFtr();
+        Tbl tbl = factory.createTbl();
+        Tr tr = factory.createTr();
+        Tc tc1 = factory.createTc();
+        Tc tc2 = factory.createTc();
         //文本内容
         P paragraph = factory.createP();
         R run = factory.createR();
         RPr rPr = factory.createRPr();
-        Docx4jUtil.setFontSize(rPr,"14");
+        Docx4jUtil.setFontSize(rPr,"16");
         //去掉段落空行
         PPr paragraphPPr = paragraph.getPPr();
         if (paragraphPPr==null){
@@ -126,13 +122,23 @@ public class AddingAFooter {
         pPr.setJc(jc);
         p.setPPr(pPr);
 
-        footer.getContent().add(paragraph);
-        footer.getContent().add(p);
+        setCellWidth(tc1, 7500);
+
+        tc1.getContent().add(paragraph);
+        tc2.getContent().add(p);
+
+        tr.getContent().add(tc1);
+        tr.getContent().add(tc2);
+        tbl.getContent().add(tr);
+//        footer.getContent().add(paragraph);
+//        footer.getContent().add(p);
+
+        footer.getContent().add(tbl);
         return footer;
     }
 
 
-    public static void createFooterReference(WordprocessingMLPackage wordMLPackage,Relationship relationship) {
+    public void createFooterReference(WordprocessingMLPackage wordMLPackage,Relationship relationship) {
         List<SectionWrapper> sections =
                 wordMLPackage.getDocumentModel().getSections();
 
@@ -148,5 +154,17 @@ public class AddingAFooter {
         footerReference.setId(relationship.getId());
         footerReference.setType(HdrFtrRef.DEFAULT);
         sectionProperties.getEGHdrFtrReferences().add(footerReference);
+    }
+
+    /**
+     *  本方法创建一个单元格属性集对象和一个表格宽度对象. 将给定的宽度设置到宽度对象然后将其添加到
+     *  属性集对象. 最后将属性集对象设置到单元格中.
+     */
+    private void setCellWidth(Tc tableCell, int width) {
+        TcPr tableCellProperties = new TcPr();
+        TblWidth tableWidth = new TblWidth();
+        tableWidth.setW(BigInteger.valueOf(width));
+        tableCellProperties.setTcW(tableWidth);
+        tableCell.setTcPr(tableCellProperties);
     }
 }

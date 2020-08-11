@@ -30,10 +30,11 @@ public class PageContent2 {
         //添加标题一：项目概述
         wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "2 运行状况");
 
+        Docx4jUtil.addTableTitle(wpMLPackage, "表1 预/报警机组统计");
         //创建一个表格
         Tbl tbl = factory.createTbl();
         //生成表头
-        createTalbeTitle(wpMLPackage,tbl);
+        createTalbeTitle(tbl);
         //生成数据
         createTableDate(wpMLPackage,tbl, unitInfos);
         //TODO 删除输出语句
@@ -178,7 +179,7 @@ public class PageContent2 {
      * 为table生成表头
      * @param tbl
      */
-    private void createTalbeTitle(WordprocessingMLPackage wpMLPackage,Tbl tbl){
+    private void createTalbeTitle(Tbl tbl){
         //给table添加边框
         addBorders(tbl);
         Tr tr = factory.createTr();

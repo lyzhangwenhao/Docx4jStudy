@@ -55,7 +55,7 @@ public class DrawChartLineUtil {
         // 步骤2：根据Dataset 生成JFreeChart对象，以及做相应的设置
         JFreeChart freeChart = createChart(dataset,title,xUnit,yUnit);
         //步骤3：将JFreeChart对象保存为一个文件
-        BufferedImage bufferedImage = freeChart.createBufferedImage(600, 300);
+        BufferedImage bufferedImage = freeChart.createBufferedImage(700, 350);
         //确定图表文件存在的位置，如果文件夹路径不存在则创建一个
         File mkdirPath = new File("D:/chart/lineChart");
         if(!mkdirPath.exists() && !mkdirPath.isDirectory()){

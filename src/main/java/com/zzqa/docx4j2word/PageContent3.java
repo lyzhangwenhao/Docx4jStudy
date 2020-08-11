@@ -33,8 +33,6 @@ public class PageContent3 {
         try {
             //添加标题三：震动图谱
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading1", "3 震动图谱");
-
-
             //三种报警等级
             List<UnitInfo> unitInfos1 = new ArrayList<>();  //报警机组数据
             List<UnitInfo> unitInfos2 = new ArrayList<>();  //预警机组数据
@@ -110,7 +108,7 @@ public class PageContent3 {
                 deleteImageFile(imageFile1);
                 Docx4jUtil.addTableTitle(wpMLPackage,
                         "图"+index+"."+ (i+1) + "-1 " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"趋势图(X轴数据从"+unitInfo.getColKeys1()[0]+"到"+unitInfo.getColKeys1()[unitInfo.getColKeys1().length-1]+")");
+                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"趋势图");
 
                 //2、波形图
                 File imageFile2 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart(), "t(s)", "g", "波线图线", unitInfo.getColKeys2(), unitInfo.getData2());
@@ -119,7 +117,7 @@ public class PageContent3 {
                 deleteImageFile(imageFile2);
                 Docx4jUtil.addTableTitle(wpMLPackage,
                         "图"+index+"."+ (i+1) + "-2 " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"波形图(X轴数据从"+unitInfo.getColKeys2()[0]+"到"+unitInfo.getColKeys2()[unitInfo.getColKeys2().length-1]+")");
+                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"波形图");
 
                 //3、频谱图
                 File imageFile3 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart(), "t(s)", "g", "频谱图线", unitInfo.getColKeys3(), unitInfo.getData3());
@@ -128,7 +126,7 @@ public class PageContent3 {
                 deleteImageFile(imageFile3);
                 Docx4jUtil.addTableTitle(wpMLPackage,
                         "图"+index+"."+ (i+1) + "-3 " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"频谱图(X轴数据从"+unitInfo.getColKeys3()[0]+"到"+unitInfo.getColKeys3()[unitInfo.getColKeys3().length-1]+")");
+                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"频谱图");
 
                 //4、包络图
                 File imageFile4 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart(), "t(s)", "g", "包络图线", unitInfo.getColKeys4(), unitInfo.getData4());
@@ -137,7 +135,7 @@ public class PageContent3 {
                 deleteImageFile(imageFile4);
                 Docx4jUtil.addTableTitle(wpMLPackage,
                         "图"+index+"."+ (i+1) + "-4 " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"包络图(X轴数据从"+unitInfo.getColKeys4()[0]+"到"+unitInfo.getColKeys4()[unitInfo.getColKeys4().length-1]+")");
+                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart()+"包络图");
 
             }
         }
