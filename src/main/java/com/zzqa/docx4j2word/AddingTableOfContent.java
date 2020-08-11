@@ -27,52 +27,38 @@ public class AddingTableOfContent {
      * @param wordMLPackage
      */
     public static void addTableOfContent(WordprocessingMLPackage wordMLPackage) {
-//        AddingAHeader addingAHeader = new AddingAHeader();
-//        AddingAFooter addingAFooter = new AddingAFooter();
-        try {
-//            Relationship headerPart = addingAHeader.createHeaderPart(wordMLPackage, "杭州经济技术开发区6号路260号中自科技园1幢5楼 &&" +
-//                    "传真：0571-28995841       网址：www.windit.com.cn");
-//            addingAHeader.createHeaderReference(wordMLPackage, headerPart);
-//            Relationship footerPart = addingAFooter.createFooterPart(wordMLPackage, "“WindIT>中自庆安”的标识及其所有的其他版本均属浙江中自庆安新能源技术有限公司商标和服务标志。 &&" +
-//                    "涉及的其他品牌名称，无论是否注册，都归浙江中自庆安新能源技术有限公司公司所有。&&" +
-//                    "本文件所含的信息仅供参考，我们不承担任何相关责任，如有变更恕不另行通知。 &&" +
-//                    "未经过明确书面授权，严禁复制，使用或披露给第三方。");
-//            addingAFooter.createFooterReference(wordMLPackage, footerPart);
-            //目录标题
-            P content = factory.createP();
-            Text text = factory.createText();
-            R r = factory.createR();
+        //目录标题
+        P content = factory.createP();
+        Text text = factory.createText();
+        R r = factory.createR();
 
-            text.setValue("目录");
+        text.setValue("目录");
 
-            //设置字体
-            RPr rPr = factory.createRPr();
-            Docx4jUtil.setFontSize(rPr, "30");
-            Docx4jUtil.setFont(rPr, "宋体");
-            //设置居中格式
-            Jc jc = new Jc();
-            jc.setVal(JcEnumeration.CENTER);
-            PPr pPr = factory.createPPr();
-            pPr.setJc(jc);
-            content.setPPr(pPr);
-            r.setRPr(rPr);
-            r.getContent().add(text);
-            content.getContent().add(r);
-            wordMLPackage.getMainDocumentPart().addObject(content);
+        //设置字体
+        RPr rPr = factory.createRPr();
+        Docx4jUtil.setFontSize(rPr, "30");
+        Docx4jUtil.setFont(rPr, "宋体");
+        //设置居中格式
+        Jc jc = new Jc();
+        jc.setVal(JcEnumeration.CENTER);
+        PPr pPr = factory.createPPr();
+        pPr.setJc(jc);
+        content.setPPr(pPr);
+        r.setRPr(rPr);
+        r.getContent().add(text);
+        content.getContent().add(r);
+        wordMLPackage.getMainDocumentPart().addObject(content);
 
 
-            //目录正文
-            P paragraph = factory.createP();
+        //目录正文
+        P paragraph = factory.createP();
 
-            addFieldBegin(paragraph);
-            addTableOfContentField(paragraph);
-            addFieldEnd(paragraph);
+        addFieldBegin(paragraph);
+        addTableOfContentField(paragraph);
+        addFieldEnd(paragraph);
 
-            wordMLPackage.getMainDocumentPart().getJaxbElement().getBody().getContent().add(paragraph);
-            Docx4jUtil.addNextSection(wordMLPackage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        wordMLPackage.getMainDocumentPart().getJaxbElement().getBody().getContent().add(paragraph);
+        Docx4jUtil.addNextSection(wordMLPackage);
 
 
     }
