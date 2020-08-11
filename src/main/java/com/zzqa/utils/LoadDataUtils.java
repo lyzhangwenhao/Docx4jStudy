@@ -14,6 +14,11 @@ import java.io.InputStreamReader;
  */
 public class LoadDataUtils {
 
+    /**
+     * 用于测试读取文本数据
+     * @param Path
+     * @return
+     */
     public static String ReadFile(String Path) {
         BufferedReader reader = null;
         String laststr = "";

@@ -4,8 +4,6 @@ import com.zzqa.utils.Docx4jUtil;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.structure.SectionWrapper;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.Part;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;

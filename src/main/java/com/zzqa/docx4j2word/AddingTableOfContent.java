@@ -3,7 +3,6 @@ package com.zzqa.docx4j2word;
 import com.zzqa.utils.Docx4jUtil;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.relationships.Namespaces;
-import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.*;
 
 import javax.xml.bind.JAXBElement;

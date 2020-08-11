@@ -4,11 +4,9 @@ import com.zzqa.pojo.UnitInfo;
 import com.zzqa.utils.Docx4jUtil;
 import com.zzqa.utils.DrawChartLineUtil;
 import com.zzqa.utils.DrawChartLineUtilQ;
-import com.zzqa.utils.LoadDataUtils;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ObjectFactory;
 
-import javax.print.Doc;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

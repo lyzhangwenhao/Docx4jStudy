@@ -2,10 +2,8 @@ package com.zzqa.utils;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYDataset;
@@ -30,7 +28,7 @@ import java.text.SimpleDateFormat;
 public class DrawChartLineUtilQ {
 
     /**
-     * 传入数据生成折线图
+     * 传入数据生成趋势图
      * @param title 机组名称：一般为机组+测点
      * @param xUnit x轴单位
      * @param yUnit y轴单位
