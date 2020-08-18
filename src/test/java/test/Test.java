@@ -34,6 +34,7 @@ public class Test {
             e.printStackTrace();
         }
     }
+
     @org.junit.Test
     public void method8(){
 
@@ -184,7 +185,7 @@ public class Test {
          //直接用SimpleDateFormat格式化 Date对象，即可得到相应格式的日期 字符串。
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-        long time3 = 1470212176122L;
+        long time3 = 1597384476177L;
         String format = transitionDate(time3);
         System.out.println(format);
     }

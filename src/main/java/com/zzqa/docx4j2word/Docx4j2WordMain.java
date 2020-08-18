@@ -1,8 +1,16 @@
 package com.zzqa.docx4j2word;
 
 import com.zzqa.pojo.UnitInfo;
+import com.zzqa.utils.Docx4jUtil;
 import com.zzqa.utils.LoadDataUtils;
+import org.docx4j.convert.out.common.preprocess.PageNumberInformationCollector;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.StyleDefinitionsPart;
+import org.docx4j.toc.Toc;
+import org.docx4j.toc.TocGenerator;
+import org.docx4j.toc.TocHelper;
+import org.docx4j.toc.TocStyles;
+import org.docx4j.wml.*;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -24,9 +32,9 @@ public class Docx4j2WordMain {
 
             //数据准备
             String reportName = "风电场风电机组";  //项目名称
-            Long startTime = 1468166400000L;    //报告开始时间毫秒值
-            Long endTime = System.currentTimeMillis();  //报告结束时间毫秒值
-            String logoPath = "src\\main\\resources\\images\\logo.png"; //封面logo路径
+            long startTime = 1468166400000L;    //报告开始时间毫秒值
+            long endTime = System.currentTimeMillis();  //报告结束时间毫秒值
+            String logoPath = "D:\\01_ideaspace\\Docx4jStudy\\src\\main\\resources\\images\\logo.png"; //封面logo路径
             String linePath = "src\\main\\resources\\images\\横线.png";   //封面横线路径
 
             int normalPart = 106;   //正常机组数量
@@ -48,8 +56,11 @@ public class Docx4j2WordMain {
             Cover cover = new Cover();
             //创建封面
             wpMLPackage = cover.createCover(wpMLPackage,reportName,startTime, endTime, logoPath,linePath);
+            //在这个前面添加目录
+            Docx4jUtil.addNextSection(wpMLPackage);
             //添加目录
-            AddingTableOfContent.addTableOfContent(wpMLPackage);
+//            AddingTableOfContent addingTableOfContent = new AddingTableOfContent();
+//            addingTableOfContent.addTableOfContent(wpMLPackage);
             //文件内容1:项目概述
             PageContent1 pageContent1 = new PageContent1();
             pageContent1.createPageContent1(wpMLPackage,reportName,normalPart,warningPart,alarmPart);
@@ -68,12 +79,17 @@ public class Docx4j2WordMain {
             if (!docxFile.exists() && !docxFile.isDirectory()){
                 docxFile.mkdirs();
             }
+
+            //生成目录
+            TocGenerator tocGenerator = new TocGenerator(wpMLPackage);
+            Toc.setTocHeadingText("目录");
+            tocGenerator.generateToc(15, TocHelper.DEFAULT_TOC_INSTRUCTION,true);
+
             wpMLPackage.save(new File(targetFile));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -104,7 +120,7 @@ public class Docx4j2WordMain {
         String dataY4 = LoadDataUtils.ReadFile("C:/Users/Mi_dad/Desktop/包络图Y.txt");
         double[][] data4 = string2DoubleArray(dataY4);
 
-        for (int i=0; i<20;i++){
+        for (int i=0; i<30;i++){
             unitInfo = new UnitInfo();
             unitInfo.setUnitName((i+1)+"#机组");
             unitInfo.setColKeys1(colKeys1);

@@ -111,6 +111,7 @@ public class AddingAHeader {
         paragraph.getContent().add(run);
 
         setCellWidth(tc1, 6000);
+        setCellWidth(tc2, 4000);
 
         tc1.getContent().add(p);
         tc2.getContent().add(paragraph);

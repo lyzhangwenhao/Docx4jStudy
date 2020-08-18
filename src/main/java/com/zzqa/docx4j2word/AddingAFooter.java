@@ -121,6 +121,7 @@ public class AddingAFooter {
         p.setPPr(pPr);
 
         setCellWidth(tc1, 7500);
+        setCellWidth(tc2, 2000);
 
         tc1.getContent().add(paragraph);
         tc2.getContent().add(p);

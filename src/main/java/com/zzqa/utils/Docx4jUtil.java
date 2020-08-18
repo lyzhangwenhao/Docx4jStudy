@@ -1,6 +1,6 @@
 package com.zzqa.utils;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.docx4j.dml.wordprocessingDrawing.Inline;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
@@ -32,8 +32,8 @@ public class Docx4jUtil {
         br.setType(STBrType.PAGE);
         P p = objectFactory.createP();
         p.getContent().add(br);
-        wpMLPackage.getMainDocumentPart().addObject(p);
-//        wpMLPackage.getMainDocumentPart().getJaxbElement().getBody().getContent().add(p);
+//        wpMLPackage.getMainDocumentPart().addObject(p);
+        wpMLPackage.getMainDocumentPart().getJaxbElement().getBody().getContent().add(p);
     }
     /**
      * 插入下一节

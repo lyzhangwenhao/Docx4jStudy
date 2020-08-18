@@ -98,7 +98,7 @@ public class PageContent3 {
             UnitInfo unitInfo = new UnitInfo();
             for (int i=0; i<unitInfos.size(); i++){
                 unitInfo = unitInfos.get(i);
-                wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading3", index + "."+ (i+1) + " " +unitInfo.getUnitName());
+                wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading3", index + "."+ (i+1) + " " +unitInfo.getUnitName() + "-" + unitInfo.getUnitPart());
                 //1、趋势图
                 File imageFile1 = DrawChartLineUtilQ.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart(), "t(s)", "g", "趋势图线", unitInfo.getColKeys1(), unitInfo.getData1());
                 byte[] bytes1 = Docx4jUtil.convertImageToByteArray(imageFile1);

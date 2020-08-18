@@ -1,8 +1,12 @@
 package com.zzqa.docx4j2word;
 
 import com.zzqa.utils.Docx4jUtil;
+import org.docx4j.Docx4jProperties;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.relationships.Namespaces;
+import org.docx4j.toc.TocException;
+import org.docx4j.toc.TocGenerator;
+import org.docx4j.toc.TocHelper;
 import org.docx4j.wml.*;
 
 import javax.xml.bind.JAXBElement;
@@ -16,7 +20,7 @@ import javax.xml.namespace.QName;
  * @date 2020/8/6 18:07
  */
 public class AddingTableOfContent {
-    private static ObjectFactory factory = new ObjectFactory();
+    private ObjectFactory factory = new ObjectFactory();
 
     /**
      * 将目录表添加到文档.
@@ -25,7 +29,7 @@ public class AddingTableOfContent {
      *
      * @param wordMLPackage
      */
-    public static void addTableOfContent(WordprocessingMLPackage wordMLPackage) {
+    public void addTableOfContent(WordprocessingMLPackage wordMLPackage) throws TocException {
         //目录标题
         P content = factory.createP();
         Text text = factory.createText();
@@ -56,8 +60,15 @@ public class AddingTableOfContent {
         addTableOfContentField(paragraph);
         addFieldEnd(paragraph);
 
+
+
         wordMLPackage.getMainDocumentPart().getJaxbElement().getBody().getContent().add(paragraph);
+//        wordMLPackage.getMainDocumentPart().getDocumentSettingsPart().getJaxbElement().setUpdateFields(new BooleanDefaultTrue());
         Docx4jUtil.addNextSection(wordMLPackage);
+
+//        TocGenerator tocGenerator = new TocGenerator(wordMLPackage);
+//        tocGenerator.generateToc(15, TocHelper.DEFAULT_TOC_INSTRUCTION,true);
+//        tocGenerator.updateToc(false);
 
 
     }
@@ -72,7 +83,7 @@ public class AddingTableOfContent {
      *
      * @param paragraph
      */
-    private static void addTableOfContentField(P paragraph) {
+    private void addTableOfContentField(P paragraph) {
         R run = factory.createR();
         Text txt = new Text();
         txt.setSpace("preserve");
@@ -90,7 +101,7 @@ public class AddingTableOfContent {
      *
      * @param paragraph
      */
-    private static void addFieldBegin(P paragraph) {
+    private void addFieldBegin(P paragraph) {
         R run = factory.createR();
         FldChar fldchar = factory.createFldChar();
         fldchar.setFldCharType(STFldCharType.BEGIN);
@@ -108,7 +119,7 @@ public class AddingTableOfContent {
      *
      * @param paragraph
      */
-    private static void addFieldEnd(P paragraph) {
+    private void addFieldEnd(P paragraph) {
         R run = factory.createR();
         FldChar fldcharend = factory.createFldChar();
         fldcharend.setFldCharType(STFldCharType.END);
@@ -122,7 +133,7 @@ public class AddingTableOfContent {
      * @param fldchar
      * @return
      */
-    public static JAXBElement getWrappedFldChar(FldChar fldchar) {
+    public JAXBElement getWrappedFldChar(FldChar fldchar) {
         return new JAXBElement(new QName(Namespaces.NS_WORD12, "fldChar"), FldChar.class, fldchar);
     }
 }
