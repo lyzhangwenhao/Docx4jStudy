@@ -1,4 +1,4 @@
-package com.zzqa.pojo;
+package com.tom.pojo;
 
 import java.util.Map;
 
@@ -20,23 +20,32 @@ public class UnitInfo {
     private String level;   //报警等级
 
     //趋势图数据
-    private long[] colKeys1;
+//    private Map<long[],double[][]> tendencyChar ;
+    private String[] colKeys1;
     private double[][] data1;
     //波形图数据
-    private double[] colKeys2;
+    private String[] colKeys2;
     private double[][] data2;
     //频谱图数据
-    private double[] colKeys3;
+    private String[] colKeys3;
     private double[][] data3;
     //包络图数据
-    private double[] colKeys4;
+    private String[] colKeys4;
     private double[][] data4;
 
-    public long[] getColKeys1() {
+    public String getUnitStation() {
+        return unitStation;
+    }
+
+    public void setUnitStation(String unitStation) {
+        this.unitStation = unitStation;
+    }
+
+    public String[] getColKeys1() {
         return colKeys1;
     }
 
-    public void setColKeys1(long[] colKeys1) {
+    public void setColKeys1(String[] colKeys1) {
         this.colKeys1 = colKeys1;
     }
 
@@ -48,38 +57,13 @@ public class UnitInfo {
         this.data1 = data1;
     }
 
-    public double[] getColKeys2() {
+    public String[] getColKeys2() {
         return colKeys2;
     }
 
-    public void setColKeys2(double[] colKeys2) {
+    public void setColKeys2(String[] colKeys2) {
         this.colKeys2 = colKeys2;
     }
-
-    public double[] getColKeys3() {
-        return colKeys3;
-    }
-
-    public void setColKeys3(double[] colKeys3) {
-        this.colKeys3 = colKeys3;
-    }
-
-    public double[] getColKeys4() {
-        return colKeys4;
-    }
-
-    public void setColKeys4(double[] colKeys4) {
-        this.colKeys4 = colKeys4;
-    }
-
-    public String getUnitStation() {
-        return unitStation;
-    }
-
-    public void setUnitStation(String unitStation) {
-        this.unitStation = unitStation;
-    }
-
 
     public double[][] getData2() {
         return data2;
@@ -89,7 +73,13 @@ public class UnitInfo {
         this.data2 = data2;
     }
 
+    public String[] getColKeys3() {
+        return colKeys3;
+    }
 
+    public void setColKeys3(String[] colKeys3) {
+        this.colKeys3 = colKeys3;
+    }
 
     public double[][] getData3() {
         return data3;
@@ -99,7 +89,13 @@ public class UnitInfo {
         this.data3 = data3;
     }
 
+    public String[] getColKeys4() {
+        return colKeys4;
+    }
 
+    public void setColKeys4(String[] colKeys4) {
+        this.colKeys4 = colKeys4;
+    }
 
     public double[][] getData4() {
         return data4;

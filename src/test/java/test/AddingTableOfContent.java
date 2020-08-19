@@ -1,12 +1,9 @@
-package com.zzqa.docx4j2word;
+package test;
 
 import com.zzqa.utils.Docx4jUtil;
-import org.docx4j.Docx4jProperties;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.relationships.Namespaces;
 import org.docx4j.toc.TocException;
-import org.docx4j.toc.TocGenerator;
-import org.docx4j.toc.TocHelper;
 import org.docx4j.wml.*;
 
 import javax.xml.bind.JAXBElement;

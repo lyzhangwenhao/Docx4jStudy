@@ -4,6 +4,7 @@ import org.docx4j.jaxb.Context;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.*;
 import org.junit.Test;
 
@@ -76,8 +77,22 @@ public class CreateTable {
         addTableTc(dateTr2, "峰值", 1100,false,"black");
         addTableTc(dateTr2, "10g", 1800,false,"black");
         addTableTc(dateTr2, "报警", 1100,true,"#ff0000");
+
+        //第二行数据
+        Tr dateTr3 = factory.createTr();
+        addTableTc(dateTr3, "01#", 1100,false,"black");
+        addTableTc(dateTr3, "发电机前轴承", 1500,false,"black");
+        addTableTc(dateTr3, "8", 1100,false,"black");
+        addTableTc(dateTr3, "7g", 1100,false,"black");
+        addTableTc(dateTr3, "峰值", 1100,false,"black");
+        addTableTc(dateTr3, "10g", 1800,false,"black");
+        addTableTc(dateTr3, "报警", 1100,true,"#ff0000");
         //将tr添加到table中
-        tbl.getContent().add(dateTr2);
+        tbl.getContent().add(dateTr3);
+
+        mergeCellsVertically(tbl, 2, 1, 3);
+
+
 
 
         wpMLPackage.getMainDocumentPart().addObject(tbl);
@@ -87,6 +102,108 @@ public class CreateTable {
             e.printStackTrace();
         }
     }
+
+
+
+
+    /**
+     * @Description: 跨行合并
+     */
+    public void mergeCellsVertically(Tbl tbl, int col, int fromRow, int toRow) {
+        if (col < 0 || fromRow < 0 || toRow < 0) {
+            return;
+        }
+        for (int rowIndex = fromRow; rowIndex <= toRow; rowIndex++) {
+            Tc tc = getTc(tbl, rowIndex, col);
+            if (tc == null) {
+                break;
+            }
+            TcPr tcPr = getTcPr(tc);
+            TcPrInner.VMerge vMerge = tcPr.getVMerge();
+            if (vMerge == null) {
+                vMerge = new TcPrInner.VMerge();
+                tcPr.setVMerge(vMerge);
+            }
+            if (rowIndex == fromRow) {
+                vMerge.setVal("restart");
+            } else {
+                vMerge.setVal("continue");
+            }
+        }
+    }
+
+    /**
+     * @Description:得到指定位置的单元格
+     */
+    public Tc getTc(Tbl tbl, int row, int cell) {
+        if (row < 0 || cell < 0) {
+            return null;
+        }
+        List<Tr> trList = getTblAllTr(tbl);
+        if (row >= trList.size()) {
+            return null;
+        }
+        List<Tc> tcList = getTrAllCell(trList.get(row));
+        if (cell >= tcList.size()) {
+            return null;
+        }
+        return tcList.get(cell);
+    }
+
+    /**
+     * @Description: 得到表格所有的行
+     */
+    public List<Tr> getTblAllTr(Tbl tbl) {
+        List<Object> objList = getAllElementFromObject(tbl, Tr.class);
+        List<Tr> trList = new ArrayList<Tr>();
+        if (objList == null) {
+            return trList;
+        }
+        for (Object obj : objList) {
+            if (obj instanceof Tr) {
+                Tr tr = (Tr) obj;
+                trList.add(tr);
+            }
+        }
+        return trList;
+
+    }
+    /**
+     * @Description: 获取所有的单元格
+     */
+    public List<Tc> getTrAllCell(Tr tr) {
+        List<Object> objList = getAllElementFromObject(tr, Tc.class);
+        List<Tc> tcList = new ArrayList<Tc>();
+        if (objList == null) {
+            return tcList;
+        }
+        for (Object tcObj : objList) {
+            if (tcObj instanceof Tc) {
+                Tc objTc = (Tc) tcObj;
+                tcList.add(objTc);
+            }
+        }
+        return tcList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 添加TableCell

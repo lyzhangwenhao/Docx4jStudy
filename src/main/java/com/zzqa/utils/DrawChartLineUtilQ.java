@@ -38,7 +38,7 @@ public class DrawChartLineUtilQ {
      * @return 返回一个File对象
      */
     public static File getImageFile(String title,String xUnit,String yUnit,
-                                    String rowKey,String[] colKeys,double[][] data){
+                                    String rowKey,long[] colKeys,double[][] data){
         ChartUtil.setChartTheme();
         // 步骤1：创建CategoryDataset对象（准备数据）
         String[]rowKeys={rowKey};
@@ -116,16 +116,10 @@ public class DrawChartLineUtilQ {
      * 创建XYDataset对象
      *
      */
-    public static XYDataset createDataset(String rowKey,String[] colKeys,double[][] data) {
+    public static XYDataset createDataset(String rowKey,long[] colKeys,double[][] data) {
         XYSeries first = new XYSeries(rowKey);
         for (int i=0;i<colKeys.length;i++){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
-            simpleDateFormat.applyPattern("yyyy/MM/dd HH:mm");
-            try {
-                first.add(simpleDateFormat.parse(colKeys[i]).getTime(),data[0][i]);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            first.add(colKeys[i],data[0][i]);
         }
         XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
         xySeriesCollection.addSeries(first);
