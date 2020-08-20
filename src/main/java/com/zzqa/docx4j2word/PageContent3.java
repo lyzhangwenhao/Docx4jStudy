@@ -11,7 +11,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * ClassName: PageConten3
@@ -103,61 +104,124 @@ public class PageContent3 {
         }
         if (unitInfos != null && unitInfos.size() != 0) {
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading2", index + " " + title);
-            UnitInfo unitInfo = new UnitInfo();
+
+            Map<String, List<UnitInfo>> collect = unitInfos.stream().collect(Collectors.groupingBy(u -> u.getUnitName() + u.getUnitPart() + u.getUnitStation()));
+            AtomicInteger titleIndex = new AtomicInteger(0); //标题序号
+            String finalIndex = index;  //如果不添加这个中间变量stream流中使用会报错
+            collect.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(map -> {
+
+                String key = map.getKey();
+                List<UnitInfo> value = map.getValue();
+                titleIndex.getAndIncrement();
+                //添加三级标题
+                wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading3", finalIndex + "." + titleIndex + " " + key);
+                for (int i = 0; i < value.size(); i++) {
+                    UnitInfo unitInfo = value.get(i);
+                    //1、趋势图
+                    File imageFile = DrawChartLineUtilQ.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+                            "t(s)", "g", unitInfo.getType() + "趋势图线", unitInfo.getColKeys1(), unitInfo.getData1());
+                    byte[] bytes = Docx4jUtil.convertImageToByteArray(imageFile);
+                    Docx4jUtil.addImageToPackage(wpMLPackage, bytes);
+                    deleteImageFile(imageFile);
+                    Docx4jUtil.addTableTitle(wpMLPackage,
+                            "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
+                                    unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + unitInfo.getType() + "趋势图");
+                    if (i == value.size() - 1) {
+                        //2、波形图
+                        File imageFile2 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+                                "t(s)", "g", "波线图线", unitInfo.getColKeys2(), unitInfo.getData2());
+                        byte[] bytes2 = Docx4jUtil.convertImageToByteArray(imageFile2);
+                        Docx4jUtil.addImageToPackage(wpMLPackage, bytes2);
+                        deleteImageFile(imageFile2);
+                        Docx4jUtil.addTableTitle(wpMLPackage,
+                                "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
+                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + "波形图");
+
+                        //3、频谱图
+                        File imageFile3 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+                                "t(s)", "g", "频谱图线", unitInfo.getColKeys3(), unitInfo.getData3());
+                        byte[] bytes3 = Docx4jUtil.convertImageToByteArray(imageFile3);
+                        Docx4jUtil.addImageToPackage(wpMLPackage, bytes3);
+                        deleteImageFile(imageFile3);
+                        Docx4jUtil.addTableTitle(wpMLPackage,
+                                "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
+                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + "频谱图");
+
+                        //4、包络图
+                        File imageFile4 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+                                "t(s)", "g", "包络图线", unitInfo.getColKeys4(), unitInfo.getData4());
+                        byte[] bytes4 = Docx4jUtil.convertImageToByteArray(imageFile4);
+                        Docx4jUtil.addImageToPackage(wpMLPackage, bytes4);
+                        deleteImageFile(imageFile4);
+                        Docx4jUtil.addTableTitle(wpMLPackage,
+                                "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
+                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + "包络图");
+                    }
+
+                }
 
 
-            for (int i = 0; i < unitInfos.size(); i++) {
-                //图表索引序号
-                int num = 1;
-                unitInfo = unitInfos.get(i);
-                wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading3", index + "." + (i + 1) + " " + unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation());
-
-
-                //1、趋势图
-                File imageFile = DrawChartLineUtilQ.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
-                        "t(s)", "g", "趋势图线", unitInfo.getColKeys1(), unitInfo.getData1());
-                byte[] bytes = Docx4jUtil.convertImageToByteArray(imageFile);
-                Docx4jUtil.addImageToPackage(wpMLPackage, bytes);
-                deleteImageFile(imageFile);
-                Docx4jUtil.addTableTitle(wpMLPackage,
-                        "图" + index + "." + (i +1) + "-" + num + " " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "趋势图");
-                num++;
-                //2、波形图
-                File imageFile2 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
-                        "t(s)", "g", "波线图线", unitInfo.getColKeys2(), unitInfo.getData2());
-                byte[] bytes2 = Docx4jUtil.convertImageToByteArray(imageFile2);
-                Docx4jUtil.addImageToPackage(wpMLPackage, bytes2);
-                deleteImageFile(imageFile2);
-                Docx4jUtil.addTableTitle(wpMLPackage,
-                        "图" + index + "." + (i +1) + "-" + num + " " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "波形图");
-                num++;
-
-                //3、频谱图
-                File imageFile3 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
-                        "t(s)", "g", "频谱图线", unitInfo.getColKeys3(), unitInfo.getData3());
-                byte[] bytes3 = Docx4jUtil.convertImageToByteArray(imageFile3);
-                Docx4jUtil.addImageToPackage(wpMLPackage, bytes3);
-                deleteImageFile(imageFile3);
-                Docx4jUtil.addTableTitle(wpMLPackage,
-                        "图" + index + "." + (i +1) + "-" + num + " " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "频谱图");
-                num++;
-
-                //4、包络图
-                File imageFile4 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
-                        "t(s)", "g", "包络图线", unitInfo.getColKeys4(), unitInfo.getData4());
-                byte[] bytes4 = Docx4jUtil.convertImageToByteArray(imageFile4);
-                Docx4jUtil.addImageToPackage(wpMLPackage, bytes4);
-                deleteImageFile(imageFile4);
-                Docx4jUtil.addTableTitle(wpMLPackage,
-                        "图" + index + "." + (i +1) + "-" + num + " " +
-                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "包络图");
-                num++;
-
-            }
+            });
         }
+
+
+//        if (unitInfos != null && unitInfos.size() != 0) {
+//            wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading2", index + " " + title);
+//            UnitInfo unitInfo = new UnitInfo();
+//
+//
+//            for (int i = 0; i < unitInfos.size(); i++) {
+//                //图表索引序号
+//                int num = 1;
+//                unitInfo = unitInfos.get(i);
+//                wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading3", index + "." + (i + 1) + " " + unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation());
+//
+//
+//                //1、趋势图
+//                File imageFile = DrawChartLineUtilQ.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+//                        "t(s)", "g", "趋势图线", unitInfo.getColKeys1(), unitInfo.getData1());
+//                byte[] bytes = Docx4jUtil.convertImageToByteArray(imageFile);
+//                Docx4jUtil.addImageToPackage(wpMLPackage, bytes);
+//                deleteImageFile(imageFile);
+//                Docx4jUtil.addTableTitle(wpMLPackage,
+//                        "图" + index + "." + (i + 1) + "-" + num + " " +
+//                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "趋势图");
+//                num++;
+//                //2、波形图
+//                File imageFile2 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+//                        "t(s)", "g", "波线图线", unitInfo.getColKeys2(), unitInfo.getData2());
+//                byte[] bytes2 = Docx4jUtil.convertImageToByteArray(imageFile2);
+//                Docx4jUtil.addImageToPackage(wpMLPackage, bytes2);
+//                deleteImageFile(imageFile2);
+//                Docx4jUtil.addTableTitle(wpMLPackage,
+//                        "图" + index + "." + (i + 1) + "-" + num + " " +
+//                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "波形图");
+//                num++;
+//
+//                //3、频谱图
+//                File imageFile3 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+//                        "t(s)", "g", "频谱图线", unitInfo.getColKeys3(), unitInfo.getData3());
+//                byte[] bytes3 = Docx4jUtil.convertImageToByteArray(imageFile3);
+//                Docx4jUtil.addImageToPackage(wpMLPackage, bytes3);
+//                deleteImageFile(imageFile3);
+//                Docx4jUtil.addTableTitle(wpMLPackage,
+//                        "图" + index + "." + (i + 1) + "-" + num + " " +
+//                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "频谱图");
+//                num++;
+//
+//                //4、包络图
+//                File imageFile4 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
+//                        "t(s)", "g", "包络图线", unitInfo.getColKeys4(), unitInfo.getData4());
+//                byte[] bytes4 = Docx4jUtil.convertImageToByteArray(imageFile4);
+//                Docx4jUtil.addImageToPackage(wpMLPackage, bytes4);
+//                deleteImageFile(imageFile4);
+//                Docx4jUtil.addTableTitle(wpMLPackage,
+//                        "图" + index + "." + (i + 1) + "-" + num + " " +
+//                                unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "包络图");
+//                num++;
+//
+//            }
+//        }
     }
 
     /**

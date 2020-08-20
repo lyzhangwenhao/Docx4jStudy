@@ -5,10 +5,11 @@ import com.zzqa.utils.LoadDataUtils;
 import com.zzqa.utils.LoadExeclUtil;
 import org.junit.Test;
 
-import javax.sound.midi.Soundbank;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -139,7 +140,7 @@ public class UnitInfoTest2 {
 
 
         System.out.println("----------------------");
-        Map<String, List<UnitInfo>> collect = unitInfos1.stream().collect(Collectors.groupingBy(u->u.getUnitName()+"-"+u.getUnitPart()+"-"+u.getUnitStation()));
+        Map<String, List<UnitInfo>> collect = unitInfos1.stream().collect(Collectors.groupingBy(u->u.getUnitName()+u.getUnitPart()+u.getUnitStation()));
         Set<Map.Entry<String, List<UnitInfo>>> entries = collect.entrySet();
 
 
@@ -157,6 +158,18 @@ public class UnitInfoTest2 {
         for (String key:collect1.keySet()){
             System.out.println(key+"--"+collect.get(key));
         }
+
+
+        System.out.println("==============================");
+
+        AtomicInteger titleIndex = new AtomicInteger(0);
+        AtomicReference<String> title = new AtomicReference<>("3.1");
+        collect.entrySet().stream().sorted(Map.Entry.<String,List<UnitInfo>> comparingByKey()).forEachOrdered(u->{
+            titleIndex.getAndIncrement();
+            title.set(titleIndex+"-");
+            System.out.println(titleIndex+"---"+title);
+            System.out.println(u.getKey()+"========="+u.getValue());
+        });
 
 
     }

@@ -8,6 +8,7 @@ import org.docx4j.wml.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -123,11 +124,18 @@ public class Docx4jUtil {
      * @param bytes
      * @throws Exception
      */
-    public static void addImageToPackage(WordprocessingMLPackage wpMLPackage,byte [] bytes) throws Exception{
-        BinaryPartAbstractImage imagePart = BinaryPartAbstractImage.createImagePart(wpMLPackage, bytes);
-        int docPrId = 1;
-        int cNvPrId = 2;
-        Inline imageInline = imagePart.createImageInline("Filename hint", "Alternative", docPrId, cNvPrId, false);
+    public static void addImageToPackage(WordprocessingMLPackage wpMLPackage,byte [] bytes){
+        BinaryPartAbstractImage imagePart = null;
+        Inline imageInline = null;
+        try {
+            imagePart = BinaryPartAbstractImage.createImagePart(wpMLPackage, bytes);
+
+            int docPrId = 1;
+            int cNvPrId = 2;
+            imageInline = imagePart.createImageInline("Filename hint", "Alternative", docPrId, cNvPrId, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         P p = addInlineImageToParagraph(imageInline);
 
         wpMLPackage.getMainDocumentPart().addObject(p);
@@ -165,23 +173,31 @@ public class Docx4jUtil {
      * @return
      * @throws Exception
      */
-    public static byte[] convertImageToByteArray(File file) throws Exception {
-        InputStream is = new FileInputStream(file);
+    public static byte[] convertImageToByteArray(File file) {
+        InputStream is = null;
         long length = file.length();
-        if (length > Integer.MAX_VALUE){
-            System.out.println("File too large!!");
-        }
         byte [] bytes = new byte[(int)length];
-        int offset = 0;
-        int numRead = 0;
-        while (offset<bytes.length && (numRead = is.read(bytes,offset,bytes.length-offset)) >=0){
-            offset += numRead;
+        try {
+            is = new FileInputStream(file);
+
+            if (length > Integer.MAX_VALUE){
+                System.out.println("File too large!!");
+            }
+
+            int offset = 0;
+            int numRead = 0;
+            while (offset<bytes.length && (numRead = is.read(bytes,offset,bytes.length-offset)) >=0){
+                offset += numRead;
+            }
+            //确认所有的字节都被读取
+            if (offset < bytes.length){
+                System.out.println("Could not completely read file"+file.getName());
+            }
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //确认所有的字节都被读取
-        if (offset < bytes.length){
-            System.out.println("Could not completely read file"+file.getName());
-        }
-        is.close();
+
         return bytes;
     }
     /**
