@@ -105,7 +105,7 @@ public class PageContent3 {
         if (unitInfos != null && unitInfos.size() != 0) {
             wpMLPackage.getMainDocumentPart().addStyledParagraphOfText("Heading2", index + " " + title);
 
-            Map<String, List<UnitInfo>> collect = unitInfos.stream().collect(Collectors.groupingBy(u -> u.getUnitName() + u.getUnitPart() + u.getUnitStation()));
+            Map<String, List<UnitInfo>> collect = unitInfos.stream().collect(Collectors.groupingBy(u -> u.getUnitName() + u.getUnitStation()));
             AtomicInteger titleIndex = new AtomicInteger(0); //标题序号
             String finalIndex = index;  //如果不添加这个中间变量stream流中使用会报错
             collect.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(map -> {
@@ -125,7 +125,7 @@ public class PageContent3 {
                     deleteImageFile(imageFile);
                     Docx4jUtil.addTableTitle(wpMLPackage,
                             "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
-                                    unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + unitInfo.getType() + "趋势图");
+                                    unitInfo.getUnitName() + "-" + unitInfo.getUnitStation() + unitInfo.getType() + "趋势图");
                     if (i == value.size() - 1) {
                         //2、波形图
                         File imageFile2 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
@@ -135,7 +135,7 @@ public class PageContent3 {
                         deleteImageFile(imageFile2);
                         Docx4jUtil.addTableTitle(wpMLPackage,
                                 "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
-                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + "波形图");
+                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitStation() + "波形图");
 
                         //3、频谱图
                         File imageFile3 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
@@ -145,7 +145,7 @@ public class PageContent3 {
                         deleteImageFile(imageFile3);
                         Docx4jUtil.addTableTitle(wpMLPackage,
                                 "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
-                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + "频谱图");
+                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitStation() + "频谱图");
 
                         //4、包络图
                         File imageFile4 = DrawChartLineUtil.getImageFile(unitInfo.getUnitName() + unitInfo.getUnitPart() + unitInfo.getUnitStation(),
@@ -155,7 +155,7 @@ public class PageContent3 {
                         deleteImageFile(imageFile4);
                         Docx4jUtil.addTableTitle(wpMLPackage,
                                 "图" + finalIndex + "." + titleIndex + "-" + (i + 1) + " " +
-                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitPart() + "-" + unitInfo.getUnitStation() + "包络图");
+                                        unitInfo.getUnitName() + "-" + unitInfo.getUnitStation() + "包络图");
                     }
 
                 }
